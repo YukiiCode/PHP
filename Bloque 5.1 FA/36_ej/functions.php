@@ -16,7 +16,6 @@ function buildRespuestas($pregunta)
     $tipo = $pregunta['tipo'] == 'uno' ? "radio" : "checkbox";
 
     foreach ($pregunta['respuestas'] as $respuesta) {
-        // Usar '.' para concatenar cadenas
         $string .= "<input type='$tipo' name='" . $pregunta['name_res'] . "' value='" . $respuesta['valor'] . "'> " . $respuesta['etiqueta'] . "<br>";
     }
     return $string;

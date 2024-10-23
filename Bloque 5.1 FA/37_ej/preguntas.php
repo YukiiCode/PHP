@@ -43,3 +43,39 @@ $preguntas = [
         )
     ]
 ];
+$p_deporte = [
+    'texto' => 'Deporte favorito',
+    'tipo' => 'uno',
+    'name_res' => 'deporte_fav',
+    'respuestas' => array(
+        ['etiqueta' => 'Fútbol', 'valor' => 'futbol'],
+        ['etiqueta' => 'Baloncesto', 'valor' => 'baloncesto'],
+        ['etiqueta' => 'Voleibol', 'valor' => 'voleibol'],
+        ['etiqueta' => 'Tenis', 'valor' => 'tenis']
+    )
+];
+
+$p_estudios_eso = [
+    'texto' => 'Año de obtención de ESO',
+    'tipo' => 'fecha',
+    'name_res' => 'año_eso',
+    'respuestas' => array()
+];
+
+$p_mediterraneo = [
+    'texto' => 'Vacaciones en el Mediterráneo, ¿Destino?',
+    'tipo' => 'uno',
+    'name_res' => 'destino_mediterraneo',
+    'respuestas' => array(
+        ['etiqueta' => 'España', 'valor' => 'esp'],
+        ['etiqueta' => 'Italia', 'valor' => 'ita'],
+        ['etiqueta' => 'Grecia', 'valor' => 'gre'],
+        ['etiqueta' => 'Turquía', 'valor' => 'tur']
+    )
+];
+
+$preguntasAdicionales = [
+    'deporte' => $p_deporte,
+    'estudios_eso' => $p_estudios_eso,
+    'mediterraneo' => $p_mediterraneo
+];

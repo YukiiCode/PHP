@@ -22,7 +22,9 @@
 </head>
 
 <body>
-    <?php getHTMLPregunta($preguntas) ?>
+    <?php
+    getHTMLPregunta($preguntas);
+    ?>
 </body>
 
 </html>

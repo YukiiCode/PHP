@@ -11,18 +11,20 @@
         }
 
         div {
-
             margin-bottom: 10px;
         }
     </style>
     <?php
-    include("./functions.php");
-    include("./preguntas.php")
+    include_once("./functions.php");
+    include_once("./preguntas.php")
     ?>
 </head>
 
 <body>
-    <?php getHTMLPregunta($preguntas) ?>
+    <?php
+    getHTMLPregunta($preguntas);
+    preguntasAdicionales($preguntasAdicionales);
+    ?>
 </body>
 
 </html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        label {
+            display: flex;
+            padding: 5px;
+        }
+
+        div {
+            display: flex;
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="./31_ej.php" method="post">
+        <legend>Datos Persona</legend>
+        <label>Nombre: <input type="text" name="name"></label>
+        <label>Apellidos: <input type="text" name="lname"></label>
+        <div>Sexo: <input type="radio" name="sexo" value="hombre">Hombre <input type="radio" value="mujer"
+                name="sexo">Mujer</div>
+        <label>Curso:
+            <select name="curso" id="">
+                <option value="" hidden></option>
+                <option value="1ºSMR">1ºSMR</option>
+                <option value="2ºSMR">2ºSMR</option>
+                <option value="1ºASIR">1ºASIR</option>
+                <option value="2ºASIR">2ºASIR</option>
+                <option value="1ºDAW">1ºDAW</option>
+                <option value="2ºDAW">2ºDAW</option>
+            </select>
+        </label>
+        <label>Fecha Nacimiento: <input type="date" name="bdate"></label>
+        <button type="submit">Guardar</button>
+    </form>
+</body>
+
+</html>

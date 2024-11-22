@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <form action="" method="post">
+            <fieldset class="border p-4 rounded">
+                <legend class="text-center fw-bold">Modificar Tarea</legend>
+
+                <div class="mb-3">
+                    <label for="nif_cif" class="form-label">NIF/CIF</label>
+                    <input type="text" class="form-control" name="nif_cif" id="nif_cif">
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="apellidos" class="form-label">Apellidos</label>
+                        <input type="text" class="form-control" name="apellidos" id="apellidos">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" name="nombre" id="nombre">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="telefono" class="form-label">Teléfono</label>
+                    <input type="text" class="form-control" name="telefono" id="telefono">
+                </div>
+
+                <div class="mb-3">
+                    <label for="descripcion" class="form-label">Descripción</label>
+                    <textarea class="form-control" name="descripcion" id="descripcion"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo electrónico</label>
+                    <input type="text" class="form-control" name="email" id="email">
+                </div>
+
+                <div class="mb-3">
+                    <label for="direccion" class="form-label">Dirección</label>
+                    <input type="text" class="form-control" name="direccion" id="direccion">
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="poblacion" class="form-label">Población</label>
+                        <input type="text" class="form-control" name="poblacion" id="poblacion">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="codigo_postal" class="form-label">Código Postal</label>
+                        <input type="text" class="form-control" name="codigo_postal" id="codigo_postal">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="provincias" class="form-label">Provincia</label>
+                    <select class="form-select" name="provincia" id="provincias">
+                        <option value="">Selecciona una provincia</option>
+                        <!-- Opciones de provincias -->
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="estado" class="form-label">Estado</label>
+                    <input type="text" class="form-control" name="estado" id="estado">
+                </div>
+
+                <div class="mb-3">
+                    <label for="fecha_creacion" class="form-label">Fecha de creación</label>
+                    <input type="text" class="form-control" name="fecha_creacion" id="fecha_creacion">
+                </div>
+
+                <div class="mb-3">
+                    <label for="operarios" class="form-label">Operario encargado</label>
+                    <select class="form-select" name="operario" id="operario">
+                        <option value="">Selecciona un operario</option>
+                        <!-- Opciones de operarios -->
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="fecha_realizacion" class="form-label">Fecha de realización</label>
+                    <input type="text" class="form-control" name="fecha_realizacion" id="fecha_realizacion">
+                </div>
+
+                <div class="mb-3">
+                    <label for="anotaciones_anteriores" class="form-label">Anotaciones anteriores (Opcional)</label>
+                    <textarea class="form-control" name="anotaciones_anteriores" id="anotaciones_anteriores"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="anotaciones_posteriores" class="form-label">Anotaciones posteriores (Opcional)</label>
+                    <textarea class="form-control" name="anotaciones_posteriores"
+                        id="anotaciones_posteriores"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="Info" class="form-label">Importante: Los ficheros adicionales con información de la
+                        tarea se podran
+                        subir en cuanto esté aprobada</label>
+                </div>
+
+                <div class="text-center">
+                    <a href="pagina_principal.html"><button type="button" class="btn btn-warning">Volver</button></a>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="reset" class="btn btn-secondary">Limpiar</button>
+                </div>
+
+            </fieldset>
+        </form>
+    </div>
+</body>
+
+</html>

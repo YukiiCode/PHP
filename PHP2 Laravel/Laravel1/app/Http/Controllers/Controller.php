@@ -1,9 +1,0 @@
-<?php
-
-namespace App\Http\Controllers;
-use App\Models\filtrado_tareas;
-
-abstract class Controller
-{
-    //
-}

@@ -23,7 +23,7 @@ class Utiles
     public static function myUrl($path)
     {
         // Obtener la ruta base de la aplicación
-        $basePath = 'http://localhost/Proyecto-copia/public/';
+        $basePath = 'http://localhost/Prueba1/public/';
 
         // Construir la URL completa
         return $basePath . ltrim($path, '/');

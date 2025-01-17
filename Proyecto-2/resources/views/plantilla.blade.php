@@ -33,11 +33,11 @@
                     </a>
                 </li>
                 
-                <!-- <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link text-white" href="{{ route('ayuda') }}">
                         <i class="fas fa-question-circle me-1"></i> Ayuda
                     </a>
-                </li> -->
+                </li>
             </ul>
         </div>
     </nav>

@@ -17,7 +17,7 @@ class TareasController extends Controller
             return $empleado->tipo === 'operario';
         });
 
-        return view('nueva_tarea', compact('clientes', 'operarios'));
+        return view('nueva-tarea', compact('clientes', 'operarios'));
     }
 
     public function store(Request $request)
@@ -30,7 +30,7 @@ class TareasController extends Controller
         $tarea->fecha_finalizacion = $request->fecha_finalizacion;
         $tarea->save();
 
-        return redirect()->route('ver_tareas');
+        return redirect()->route('ver-tareas');
     }
 
     public function show($id)
@@ -51,6 +51,6 @@ class TareasController extends Controller
     {
         $tarea = Tarea::find($id);
         $tarea->delete();
-        return redirect()->route('ver_tareas');
+        return redirect()->route('ver-tareas');
     }
 }

@@ -28,18 +28,19 @@
                 <td>{{ $tarea->anotaciones }}</td>
                 <td>{{ $clientes[$tarea->cliente_id]->nombre }}</td>
                 <td>
-                    <a href="" class="btn btn-primary btn-sm">Ver Detalles/Editar</a>
-                    <a href="{{ route('borrar_tarea', ['id' => $tarea->id]) }}" class="btn btn-danger btn-sm">Eliminar</a>
+                    <a href="" class="btn btn-primary btn-sm">Detalles/Editar</a>
+                    <a href="{{ route('borrar-tarea', ['id' => $tarea->id]) }}" class="btn btn-danger btn-sm">Eliminar</a>
                     <!-- Desplegable con mas datos -->
-                    <div class="dropdown">
+                    <div class="btn-group">
                         <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Mas
+                            <a href="{{route('ver-tareas', ['id' => $tarea->id]) }}">  @if (isset($_GET['id']) && $tarea->id == $_GET['id'])Menos @else Mas @endif </a>
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Descargar Resumen</a>
-                            <a class="dropdown-item" href="#">Cambiar Estado</a>
-                        </div>
+                        <tr @if (isset($_GET['id']) && $tarea->id == $_GET['id']) style="display: block;" @else
+                            style="display: none;" @endif>
+                            <td>INFORMACION EXTRA</td>
+                        </tr>
+                    </div>
                 </td>
             </tr>
             @endforeach

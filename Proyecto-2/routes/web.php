@@ -15,6 +15,8 @@ Route::post('/nueva-tarea', [TareasController::class, 'store']);
 
 Route::get('/tareas', [TareasController::class, 'index'])->name('tareas');
 
+
+Route::get('/ver-tarea/{id}', [TareasController::class, 'verTareas'])->name('ver-tarea');
 Route::get('/ver-tareas', [TareasController::class, 'verTareas'])->name('ver-tareas');
 
 Route::get('/borrar-tarea/{id}', [TareasController::class, 'borrarTarea'])->name('borrar-tarea');
@@ -23,6 +25,9 @@ Route::get('home', function () {
     return view('home');
 })->name('home');
 
+Route::get('/ayuda', function () {
+    return view('ayuda');
+})->name('ayuda');
 
 
 

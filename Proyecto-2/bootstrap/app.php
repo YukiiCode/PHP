@@ -12,12 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->validateCsrfTokens(except: [
-            '/login',
-            '/nueva-tarea',
-            '/tareas/editar/*',
-            '/usuarios/editar/*',
-            'ver-tareas',
-            'tareas/eliminar/*',
+    
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

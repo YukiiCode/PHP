@@ -30,6 +30,16 @@
                 <td>
                     <a href="" class="btn btn-primary btn-sm">Ver Detalles/Editar</a>
                     <a href="{{ route('borrar_tarea', ['id' => $tarea->id]) }}" class="btn btn-danger btn-sm">Eliminar</a>
+                    <!-- Desplegable con mas datos -->
+                    <div class="dropdown">
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Mas
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Descargar Resumen</a>
+                            <a class="dropdown-item" href="#">Cambiar Estado</a>
+                        </div>
                 </td>
             </tr>
             @endforeach

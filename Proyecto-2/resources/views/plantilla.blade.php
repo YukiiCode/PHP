@@ -18,30 +18,26 @@
         <div class="container">
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item">
-                    <a class="nav-link text-white {{ $utiles->myUrl('home')  }}" href="{{ $utiles->myUrl('home') }}">
+                    <a class="nav-link text-white  " href="{{ route('home') }}">
                         <i class="fas fa-home me-1"></i> Home
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white {{ $utiles->myUrl('nueva-tarea')  }}" href="{{ $utiles->myUrl('nueva-tarea') }}">
+                    <a class="nav-link text-white" href="{{ route('nueva-tarea') }}">
                         <i class="fas fa-plus-circle me-1"></i> Nueva Tarea
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white {{ $utiles->myUrl('ver-tareas')  }}" href="{{ $utiles->myUrl('ver-tareas') }}">
+                    <a class="nav-link text-white" href="{{ route('ver-tareas') }}">
                         <i class="fas fa-list me-1"></i> Listado de Tareas
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white {{ $utiles->myUrl('ver-tareas-borradas')  }}" href="{{ $utiles->myUrl('ver-tareas-borradas') }}">
-                        <i class="fas fa-list me-1"></i> Listado de Tareas Borradas
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white {{ $utiles->myUrl('ayuda') }}" href="{{ $utiles->myUrl('ayuda') }}">
+                
+                <!-- <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ route('ayuda') }}">
                         <i class="fas fa-question-circle me-1"></i> Ayuda
                     </a>
-                </li>
+                </li> -->
             </ul>
         </div>
     </nav>

@@ -6,18 +6,22 @@ use App\Http\Controllers\Ctrl1;
 use App\Http\Controllers\TareasController;
 
 
-
+Route::get('/', function () {
+    return view('home');
+});
 
 Route::get('/nueva-tarea', [TareasController::class, 'index'])->name('nueva-tarea');
 Route::post('/nueva-tarea', [TareasController::class, 'store']);
 
 Route::get('/tareas', [TareasController::class, 'index'])->name('tareas');
 
-Route::get('/ver-tareas', [TareasController::class, 'verTareas'])->name('ver_tareas');
+Route::get('/ver-tareas', [TareasController::class, 'verTareas'])->name('ver-tareas');
 
-Route::get('/borrar-tarea/{id}', [TareasController::class, 'borrarTarea'])->name('borrar_tarea');
+Route::get('/borrar-tarea/{id}', [TareasController::class, 'borrarTarea'])->name('borrar-tarea');
 
-
+Route::get('home', function () {
+    return view('home');
+})->name('home');
 
 
 
@@ -28,9 +32,7 @@ Route::get('/borrar-tarea/{id}', [TareasController::class, 'borrarTarea'])->name
 
 // PRUEBAS 
 
-Route::get('/', function () {
-    return 'Hello World' . '<br> <a href="' . route('Adios') . '">Adios mundo</a>' . '<br> <a href="' . route('Hola') . '">Hola mundo</a>' . '<br> <a href="' . route('Menu') . '">Menu</a>';
-});
+
 
 Route::get('/u/{par0}/{parametro}', function ($par0, $parametro) {
     return 'Hello World' . $par0 . ' ' . $parametro;

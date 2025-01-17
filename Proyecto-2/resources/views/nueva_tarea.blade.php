@@ -3,6 +3,9 @@
 @section('titulo', 'Nueva Tarea')
 
 @section('contenido')
+
+@csrf
+
 <div class="container mt-5">
     <h2 class="text-center mb-4">Crear/Modificar Tarea</h2>
     <!-- Formulario -->

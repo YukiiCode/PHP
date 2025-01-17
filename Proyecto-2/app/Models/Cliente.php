@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Cliente extends Model
 {
     protected $table = 'clientes';
-    protected $fillable = ['id','nombre','apellidos','direccion','telefono','email','fecha_nacimiento','id_usuario'];
+    protected $fillable = ['id', 'nombre', 'apellidos', 'direccion', 'telefono', 'email', 'fecha_nacimiento', 'id_usuario'];
     public $timestamps = false;
 
     public function usuario()
@@ -18,5 +18,10 @@ class Cliente extends Model
     public function tareas()
     {
         return $this->hasMany('App\Models\Tarea', 'id_cliente');
+    }
+
+    public function getClientebyTarea($id)
+    {
+        return $this->where('id', $id)->first();
     }
 }

@@ -33,27 +33,31 @@
                     <!-- Desplegable con mas datos -->
                     <div class="btn-group">
                         <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <a style="text-decoration: none; color:white" href="{{ route('ver-tareas', ['id' => $tarea->id, 'page' => request()->query('page')]) }}"> @if (request()->query('id') == $tarea->id) Menos @else Mas @endif </a>
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 60px;">
+                            <a style="text-decoration: none; color:white"
+                                href="@if (request()->query('id') == $tarea->id) {{ route('ver-tareas', ['page'=> request()->query('page')]) }} @else {{ route('ver-tareas', ['id'=>$tarea->id, 'page'=>request()->query('page')]) }} @endif">
+                                @if (request()->query('id') == $tarea->id)
+                                Menos
+                                @else
+                                Más
+                                @endif
+                            </a>
                         </button>
-            <tr
-                @if (isset($_GET['id']) && $tarea->id == $_GET['id'] && style="display: block; ) style="display: none;"
-                @elseif (isset($_GET['id']) && $tarea->id == $_GET['id']) style="display: block;" 
-                @else style="display: none;" @endif>
+                    </div>
+
+            <tr @if (request()->query('id') == $tarea->id) style="display: table-row;" @else style="display: none;" @endif>
                 <td>INFORMACION EXTRA</td>
             </tr>
-</div>
-</td>
-</tr>
-@endforeach
-</tbody>
-</table>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
 
-<!-- Paginacion - 10 tareas por pagina -->
+    <!-- Paginacion - 10 tareas por pagina -->
 
-<div class="d-flex justify-content-center">
-    {{ $tareas->links('vendor.pagination.default') }}
-</div>
+    <div class="d-flex justify-content-center">
+        {{ $tareas->links('vendor.pagination.default') }}
+    </div>
 
 </div>
 @endsection

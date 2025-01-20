@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Que_Tal_Estas;
 use App\Http\Controllers\Ctrl1;
 use App\Http\Controllers\TareasController;
+use App\Http\Controllers\EmpleadosController;
+
 
 
 Route::get('/', function () {
@@ -15,6 +17,10 @@ Route::post('/nueva-tarea', [TareasController::class, 'store']);
 
 Route::get('/tareas', [TareasController::class, 'index'])->name('tareas');
 
+
+// Rutas para empleados
+Route::get('/ver-empleados', [EmpleadosController::class, 'index'])->name('ver-empleados');
+Route::get('/borrar-empleado/{id}', [EmpleadosController::class, 'borrarEmpleado'])->name('borrar-empleado');
 
 Route::get('/ver-tarea/{id}', [TareasController::class, 'verTareas'])->name('ver-tarea');
 Route::get('/ver-tareas', [TareasController::class, 'verTareas'])->name('ver-tareas');

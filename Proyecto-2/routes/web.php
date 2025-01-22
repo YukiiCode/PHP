@@ -1,16 +1,21 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Que_Tal_Estas;
-use App\Http\Controllers\Ctrl1;
 use App\Http\Controllers\TareasController;
 use App\Http\Controllers\EmpleadosController;
-
-
+use App\Http\Controllers\ClientesController;
 
 Route::get('/', function () {
     return view('home');
 });
+
+Route::get('/añadir-usuario', function () {
+    return view('añadir_usuario');
+})->name('añadir-usuario');
+
+Route::post('/guardar-empleado', [EmpleadosController::class, 'store'])->name('guardar-empleado');
+Route::post('/guardar-cliente', [ClientesController::class, 'store'])->name('guardar-cliente');
+
 
 Route::get('/nueva-tarea', [TareasController::class, 'index'])->name('nueva-tarea');
 Route::post('/nueva-tarea', [TareasController::class, 'store']);
@@ -35,26 +40,3 @@ Route::get('/ayuda', function () {
     return view('ayuda');
 })->name('ayuda');
 
-
-
-
-
-
-
-// PRUEBAS 
-
-
-
-Route::get('/u/{par0}/{parametro}', function ($par0, $parametro) {
-    return 'Hello World' . $par0 . ' ' . $parametro;
-});
-
-Route::get('/adios', [Ctrl1::class, 'despedida'])->name('Adios');
-
-Route::get('/hola', [Ctrl1::class, 'saludo'])->name('Hola');
-
-Route::get('/cuenta/{num?}', [Que_Tal_Estas::class, 'CuentaNumeros'])->name('cuenta');
-
-Route::get('/menu', function () {
-    return view('inicio');
-})->name('Menu');

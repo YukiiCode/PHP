@@ -13,6 +13,17 @@ class EmpleadosController extends Controller
         return view('ver_empleados', compact('empleados'));
     }
 
+    public function store(Request $request)
+    {
+        $empleado = new Empleado();
+        $empleado->nombre = $request->nombre;
+        $empleado->tipo = $request->tipo;
+        $empleado->fecha_contratacion = $request->fecha_contratacion;
+        $empleado->save();
+
+        return redirect()->route('ver-empleados')->with('success', 'Empleado guardado correctamente');
+    }
+
     public function edit($id)
     {
         $empleado = Empleado::findOrFail($id);

@@ -46,7 +46,7 @@
                     </div>
 
             <tr @if (request()->query('id') == $tarea->id) style="display: table-row;" @else style="display: none;" @endif>
-                <td>INFORMACION EXTRA</td>
+                <td>Informacion extra</td>
             </tr>
             </tr>
             @endforeach

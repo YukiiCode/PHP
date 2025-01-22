@@ -41,7 +41,7 @@ CREATE TABLE
 CREATE TABLE
     tarea (
         id INT PRIMARY KEY AUTO_INCREMENT,
-        estado ENUM ('F','C','C','A','E'), -- Add the possible values for the enum
+        estado ENUM ('F','T','C','A','E'), -- Add the possible values for the enum
         -- Finalizada , En curso, Cancelada, Esperando ser aprobada, Esperando ser asignada por un administrador
         operario_encargado INT,
         fecha_creacion DATE,

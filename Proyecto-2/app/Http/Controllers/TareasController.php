@@ -28,6 +28,12 @@ class TareasController extends Controller
         $tarea->anotaciones = $request->anotaciones;
         $tarea->fecha_creacion = $request->fecha_creacion;
         $tarea->fecha_finalizacion = $request->fecha_finalizacion;
+        if ($request->estado == null) {
+            $tarea->estado = 'E';
+        } else {
+            $tarea->estado = 'finalizada';
+        }
+        $tarea->estado = $request->estado;
         $tarea->save();
 
         return redirect()->route('ver-tareas');
@@ -44,7 +50,7 @@ class TareasController extends Controller
         $tareas = Tarea::paginate(10);
         $clientes = Cliente::all();
         $empleados = Empleado::all();
-        return view('ver_tareas', compact('tareas', 'clientes','empleados'));
+        return view('ver_tareas', compact('tareas', 'clientes', 'empleados'));
     }
 
     public function borrarTarea($id)

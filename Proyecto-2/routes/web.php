@@ -40,3 +40,6 @@ Route::get('/ayuda', function () {
     return view('ayuda');
 })->name('ayuda');
 
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -25,6 +25,18 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Botón de cerrar sesión -->
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-danger">Cerrar sesión</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- Fin del botón de cerrar sesión -->
+
             </div>
         </div>
     </div>

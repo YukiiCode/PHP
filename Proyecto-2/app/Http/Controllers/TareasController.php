@@ -17,7 +17,7 @@ class TareasController extends Controller
             return $empleado->tipo === 'operario';
         });
 
-        return view('nueva-tarea', compact('clientes', 'operarios'));
+        return view('nueva_tarea', compact('clientes', 'operarios'));
     }
 
     public function store(Request $request)

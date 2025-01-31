@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TareasController;
 use App\Http\Controllers\EmpleadosController;
 use App\Http\Controllers\ClientesController;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\FileController;
 
 Route::get('/', function () {
     return view('home');
@@ -16,6 +18,8 @@ Route::get('/añadir-usuario', function () {
 Route::post('/guardar-empleado', [EmpleadosController::class, 'store'])->name('guardar-empleado');
 Route::post('/guardar-cliente', [ClientesController::class, 'store'])->name('guardar-cliente');
 
+
+Route::post('/upload', [FileController::class, 'upload'])->name('upload');
 
 Route::get('/nueva-tarea', [TareasController::class, 'index'])->name('nueva-tarea');
 Route::post('/nueva-tarea', [TareasController::class, 'store']);

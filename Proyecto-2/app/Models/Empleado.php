@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Empleado extends Model
 {
@@ -13,6 +14,11 @@ class Empleado extends Model
     public function usuario()
     {
         return $this->belongsTo('App\Models\Usuario', 'id_usuario');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function tareas()

@@ -23,15 +23,15 @@
                 @csrf
                 <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre</label>
-                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    <input type="text" class="form-control" id="nombre" name="nombre">
                 </div>
                 <div class="mb-3">
                     <label for="tipo" class="form-label">Tipo</label>
-                    <input type="text" class="form-control" id="tipo" name="tipo" required>
+                    <input type="text" class="form-control" id="tipo" name="tipo">
                 </div>
                 <div class="mb-3">
                     <label for="fecha_contratacion" class="form-label">Fecha de Contratación</label>
-                    <input type="date" class="form-control" id="fecha_contratacion" name="fecha_contratacion" required>
+                    <input type="date" class="form-control" id="fecha_contratacion" name="fecha_contratacion">
                 </div>
                 <div class="d-grid">
                     <button type="submit" class="btn btn-primary">Guardar Empleado</button>
@@ -43,23 +43,23 @@
                 @csrf
                 <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre</label>
-                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    <input type="text" class="form-control" id="nombre" name="nombre">
                 </div>
                 <div class="mb-3">
                     <label for="apellidos" class="form-label">Apellidos</label>
-                    <input type="text" class="form-control" id="apellidos" name="apellidos" required>
+                    <input type="text" class="form-control" id="apellidos" name="apellidos">
                 </div>
                 <div class="mb-3">
                     <label for="direccion" class="form-label">Dirección</label>
-                    <input type="text" class="form-control" id="direccion" name="direccion" required>
+                    <input type="text" class="form-control" id="direccion" name="direccion">
                 </div>
                 <div class="mb-3">
                     <label for="telefono" class="form-label">Teléfono</label>
-                    <input type="text" class="form-control" id="telefono" name="telefono" required>
+                    <input type="text" class="form-control" id="telefono" name="telefono">
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
+                    <input type="email" class="form-control" id="email" name="email">
                 </div>
                 <div class="d-grid">
                     <button type="submit" class="btn btn-primary">Guardar Cliente</button>

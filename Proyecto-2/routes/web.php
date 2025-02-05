@@ -18,7 +18,6 @@ Route::get('/añadir-usuario', function () {
 Route::post('/guardar-empleado', [EmpleadosController::class, 'store'])->name('guardar-empleado');
 Route::post('/guardar-cliente', [ClientesController::class, 'store'])->name('guardar-cliente');
 
-
 Route::post('/upload', [FileController::class, 'upload'])->name('upload');
 
 Route::get('/nueva-tarea', [TareasController::class, 'index'])->name('nueva-tarea');

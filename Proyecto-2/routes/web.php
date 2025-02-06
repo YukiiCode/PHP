@@ -6,10 +6,9 @@ use App\Http\Controllers\EmpleadosController;
 use App\Http\Controllers\ClientesController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\HomeController;
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/',  [HomeController::class, 'index'])->name('home');
 
 Route::get('/añadir-usuario', function () {
     return view('añadir_usuario');
@@ -25,6 +24,7 @@ Route::post('/nueva-tarea', [TareasController::class, 'store']);
 
 Route::get('/tareas', [TareasController::class, 'index'])->name('tareas');
 
+Route::get('/clientes', [ClientesController::class, 'index'])->name('ver-clientes');
 
 // Rutas para empleados
 Route::get('/ver-empleados', [EmpleadosController::class, 'index'])->name('ver-empleados');
@@ -45,4 +45,4 @@ Route::get('/ayuda', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');

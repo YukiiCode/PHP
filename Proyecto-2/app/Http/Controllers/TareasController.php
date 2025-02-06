@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class TareasController extends Controller
 {
+    
     public function index()
     {
         $clientes = Cliente::all();

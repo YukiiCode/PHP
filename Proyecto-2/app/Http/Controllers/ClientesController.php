@@ -7,6 +7,7 @@ use App\Models\Cliente;
 
 class ClientesController extends Controller
 {
+
     public function index(Request $request)
     {
         $clientes = Cliente::paginate(10);

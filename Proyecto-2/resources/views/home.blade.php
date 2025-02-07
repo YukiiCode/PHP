@@ -18,76 +18,7 @@
         <div class="card-body">
             <div class="row mb-4">
                 <div class="col-12">
-                    <!-- <h4 class="text-muted mb-4">Bienvenido, {{ Auth::user()->name ?? 'Usuario' }}</h4> -->
-                </div>
-            </div>
-
-            <!-- Estadísticas Rápidas -->
-            <div class="row mb-5">
-                <div class="col-md-4 mb-4">
-                    <div class="card border-left-primary h-100 shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="mr-3">
-                                    <i class="fas fa-tasks fa-2x text-primary"></i>
-                                </div>
-                                <div>
-                                    <h5 class="card-title text-primary">Tareas</h5>
-
-                                    <small class="text-muted">Total registradas</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-transparent">
-                            <a href="{{ route('ver-tareas') }}" class="btn btn-link p-0">
-                                Ver todas <i class="fas fa-arrow-right ml-1"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4 mb-4">
-                    <div class="card border-left-success h-100 shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="mr-3">
-                                    <i class="fas fa-users fa-2x text-success"></i>
-                                </div>
-                                <div>
-                                    <h5 class="card-title text-success">Empleados</h5>
-
-                                    <small class="text-muted">Operarios activos</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-transparent">
-                            <a href="{{ route('ver-empleados') }}" class="btn btn-link p-0">
-                                Ver todos <i class="fas fa-arrow-right ml-1"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4 mb-4">
-                    <div class="card border-left-info h-100 shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="mr-3">
-                                    <i class="fas fa-user-tie fa-2x text-info"></i>
-                                </div>
-                                <div>
-                                    <h5 class="card-title text-info">Clientes</h5>
-
-                                    <small class="text-muted">Clientes registrados</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-transparent">
-                            <a href="{{ route('ver-clientes') }}" class="btn btn-link p-0">
-                                Ver todos <i class="fas fa-arrow-right ml-1"></i>
-                            </a>
-                        </div>
-                    </div>
+                    <h4 class="text-muted mb-4">Bienvenido, {{ Auth::user()->name ?? 'Usuario' }}</h4>
                 </div>
             </div>
 

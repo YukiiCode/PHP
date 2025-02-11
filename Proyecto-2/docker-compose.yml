@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+    # Servicio de PHP-FPM
+    laravel.test:
+        build:
+            context: ./docker/php
+            dockerfile: Dockerfile
+        image: laravel-sail
+        container_name: laravel.test
+        ports:
+            - "80:80"
+        networks:
+            - sail
+        volumes:
+            - ./:/var/www/html
+        depends_on:
+            - mysql
+
+    # Servicio de MySQL
+    mysql:
+        image: mysql:5.7
+        container_name: mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: gestion_tareas
+            MYSQL_USER: sail
+            MYSQL_PASSWORD: password
+        ports:
+            - "3306:3306"
+        networks:
+            - sail
+        volumes:
+            - sail_mysql:/var/lib/mysql
+        restart: always
+
+    # Servicio de phpMyAdmin
+    phpmyadmin:
+        image: 'phpmyadmin/phpmyadmin'
+        ports:
+            - '${FORWARD_PHPMYADMIN_PORT:-8080}:80'
+        environment:
+            PMA_HOST: mysql
+            MYSQL_USER: sail
+            MYSQL_ROOT_PASSWORD: password
+        networks:
+            - sail
+
+networks:
+    sail:
+        driver: bridge
+
+volumes:
+    sail_mysql:
+        driver: local

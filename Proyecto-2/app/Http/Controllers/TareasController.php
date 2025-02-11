@@ -74,7 +74,7 @@ class TareasController extends Controller
 
     public function verTareas()
     {
-        $tareas = Tarea::paginate(10);
+        $tareas = Tarea::paginate(7);
         $clientes = Cliente::all();
         $empleados = Empleado::all();
         return view('ver_tareas', compact('tareas', 'clientes', 'empleados'));

@@ -6,7 +6,6 @@ use App\Models\Cliente;
 use App\Models\Empleado;
 use Illuminate\Http\Request;
 use App\Models\Tarea;
-use  Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Validator;
 
 class TareasController extends Controller

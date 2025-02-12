@@ -13,14 +13,13 @@ class TareasController extends Controller
     public function index()
     {
         $tareas = Tarea::with(['cliente', 'empleado'])->paginate(7);
-
         return view('nueva_tarea', compact('tareas'));
     }
 
     public function form()
     {
         $clientes = Cliente::all();
-        $operarios = Empleado::where('tipo', 'O')->get();
+        $operarios = Empleado::where('tipo', 'operario')->get();
         return view('nueva_tarea', compact('clientes', 'operarios'));
     }
 

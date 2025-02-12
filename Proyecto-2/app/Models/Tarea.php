@@ -12,8 +12,13 @@ class Tarea extends Model
 
     public function cliente()
     {
-        return $this->belongsTo('App\Models\Cliente', 'id_cliente');
+        return $this->belongsTo(Cliente::class, 'cliente_id');
     }
+
+    public function empleado(){
+        return $this->belongsTo(Empleado::class, 'operario_id');
+    }
+
 
     public function getArchivosAttribute()
     {

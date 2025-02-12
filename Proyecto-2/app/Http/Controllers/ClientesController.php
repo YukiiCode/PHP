@@ -2,48 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Cliente;
+use App\Models\Cuotas;
+use Illuminate\Http\Request;
 
 class ClientesController extends Controller
 {
-
+    // Método para mostrar la lista de clientes
     public function index(Request $request)
     {
-        $clientes = Cliente::paginate(10);
+        $clientes = Cliente::with('cuotas')->paginate(7);
         return view('ver_clientes', compact('clientes'));
     }
 
-    public function store(Request $request)
+    // Método para mostrar detalles de un cliente específico
+    public function show($id)
     {
-        $cliente = new Cliente();
-        $cliente->nombre = $request->nombre;
-        $cliente->apellidos = $request->apellidos;
-        $cliente->direccion = $request->direccion;
-        $cliente->telefono = $request->telefono;
-        $cliente->email = $request->email;
-        $cliente->save();
-
-        return redirect()->route('ver-clientes')->with('success', 'Cliente guardado correctamente');
+        $cliente = Cliente::find($id);
+        return view('cliente', compact('cliente'));
     }
 
-    public function edit($id)
+    // Método para eliminar un cliente
+    public function borrarCliente($id)
     {
-        $cliente = Cliente::findOrFail($id);
-        return view('editar_cliente', compact('cliente'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $cliente = Cliente::findOrFail($id);
-        $cliente->update($request->all());
-        return redirect()->route('ver-clientes')->with('success', 'Cliente actualizado correctamente');
-    }
-
-    public function destroy($id)
-    {
-        $cliente = Cliente::findOrFail($id);
+        $cliente = Cliente::find($id);
         $cliente->delete();
-        return redirect()->route('ver-clientes')->with('success', 'Cliente eliminado correctamente');
+        return redirect()->route('ver-clientes')->with('success', 'Cliente eliminado con éxito.');
     }
 }

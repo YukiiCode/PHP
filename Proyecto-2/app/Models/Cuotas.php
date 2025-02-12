@@ -8,7 +8,7 @@ class Cuotas extends Model
 {
     protected $table = 'cuotas';
     protected $guarded = [];
-    protected $timestamps = false;
+    public $timestamps = false;
 
     public function cliente(){
         return $this->belongsTo('App\Models\Cliente', 'cliente_id');

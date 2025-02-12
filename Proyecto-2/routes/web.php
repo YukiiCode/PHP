@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
 
+
 Route::get('/',  [HomeController::class, 'index'])->name('home');
 
 Route::get('/añadir-usuario', function () {
@@ -19,19 +20,19 @@ Route::post('/guardar-cliente', [ClientesController::class, 'store'])->name('gua
 
 Route::post('/upload', [FileController::class, 'upload'])->name('upload');
 
-Route::get('/nueva-tarea', [TareasController::class, 'index'])->name('nueva-tarea');
+Route::get('/nueva-tarea', [TareasController::class, 'form'])->name('nueva-tarea');
 Route::post('/nueva-tarea', [TareasController::class, 'store']);
 
-Route::get('/tareas', [TareasController::class, 'index'])->name('tareas');
-
-Route::get('/clientes', [ClientesController::class, 'index'])->name('ver-clientes');
+Route::get('/ver-clientes', [ClientesController::class, 'index'])->name('ver-clientes');
+Route::get('/ver-cliente/{id}', [ClientesController::class, 'show'])->name('ver-cliente');
+Route::get('/borrar-cliente/{id}', [ClientesController::class, 'borrarCliente'])->name('borrar-cliente');
 
 // Rutas para empleados
 Route::get('/ver-empleados', [EmpleadosController::class, 'index'])->name('ver-empleados');
 Route::get('/borrar-empleado/{id}', [EmpleadosController::class, 'borrarEmpleado'])->name('borrar-empleado');
 
 Route::get('/ver-tarea/{id}', [TareasController::class, 'verTareas'])->name('ver-tarea');
-Route::get('/ver-tareas', [TareasController::class, 'verTareas'])->name('ver-tareas');
+Route::get('/ver-tareas', [TareasController::class, 'index'])->name('ver-tareas');
 
 Route::get('/borrar-tarea/{id}', [TareasController::class, 'borrarTarea'])->name('borrar-tarea');
 

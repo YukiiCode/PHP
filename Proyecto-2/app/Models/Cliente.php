@@ -20,8 +20,8 @@ class Cliente extends Model
         return $this->hasMany('App\Models\Tarea', 'id_cliente');
     }
 
-    public function getClientebyTarea($id)
+    public function cuotas()
     {
-        return $this->where('id', $id)->first();
+        return $this->hasMany('App\Models\Cuotas', 'cliente_id');
     }
 }

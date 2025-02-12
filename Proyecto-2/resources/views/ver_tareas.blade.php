@@ -1,14 +1,11 @@
 @extends('plantilla')
-
 @section('titulo', 'Listado de Tareas')
-
 @section('contenido')
 <div class="container mt-5">
     <div class="card shadow-lg">
         <div class="card-header bg-primary text-white">
             <h3 class="card-title mb-0"><i class="fas fa-tasks mr-2"></i> Listado Tareas</h3>
         </div>
-
         <div class="card-body">
             @if ($errors->any())
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -24,6 +21,7 @@
             </div>
             @endif
 
+            <!-- Tabla de Tareas -->
             <div class="table-responsive">
                 <table class="table table-hover table-bordered mb-0">
                     <thead class="thead-light">
@@ -50,7 +48,7 @@
                                 @endphp
                                 <span class="badge {{ $badgeClass }} badge-pill">{{ $tarea->estado }}</span>
                             </td>
-                            <td>{{ isset($empleados[$tarea->operario_id]) ? $empleados[$tarea->operario_id]->nombre : 'N/A' }}</td>
+                            <td>{{ $tarea->empleado ? $tarea->empleado->nombre : 'N/A' }}</td>
                             <td class="text-center">{{ \Carbon\Carbon::parse($tarea->fecha_creacion)->format('d/m/Y H:i') }}</td>
                             <td class="text-center">{{ $tarea->fecha_finalizacion ? \Carbon\Carbon::parse($tarea->fecha_finalizacion)->format('d/m/Y H:i') : 'N/A' }}</td>
                             <td>
@@ -58,7 +56,7 @@
                                     {{ Str::limit($tarea->anotaciones, 30) }}
                                 </span>
                             </td>
-                            <td>{{ isset($clientes[$tarea->cliente_id]) ? $clientes[$tarea->cliente_id]->nombre : 'N/A' }}</td>
+                            <td>{{ $tarea->cliente ? $tarea->cliente->nombre : 'N/A' }}</td>
                             <td class="text-center">
                                 <div class="btn-group" role="group">
                                     <a href="#" class="btn btn-primary btn-sm" data-toggle="tooltip" title="Editar">
@@ -79,14 +77,13 @@
                                 </div>
                             </td>
                         </tr>
-
                         @if(request()->query('id') == $tarea->id)
                         <tr class="table-info">
                             <td colspan="7">
                                 <div class="p-3">
                                     <h5 class="mb-3"><i class="fas fa-file-alt mr-2"></i>Detalles adicionales</h5>
                                     
-                                    @if($tarea->archivos && count($tarea->archivos) > 0)
+                                    @if($tarea->archivos && $tarea->archivos->count() > 0)
                                     <div class="row">
                                         @foreach($tarea->archivos as $archivo)
                                         @php
@@ -132,7 +129,6 @@
                             </td>
                         </tr>
                         @endif
-
                         @empty
                         <tr>
                             <td colspan="7" class="text-center py-4">
@@ -144,6 +140,7 @@
                 </table>
             </div>
 
+            <!-- Paginación -->
             <div class="d-flex justify-content-center mt-4">
                 {{ $tareas->links('vendor.pagination.bootstrap-4') }}
             </div>
@@ -151,4 +148,3 @@
     </div>
 </div>
 @endsection
-

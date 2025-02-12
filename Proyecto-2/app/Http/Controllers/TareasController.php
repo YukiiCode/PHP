@@ -10,14 +10,17 @@ use Illuminate\Support\Facades\Validator;
 
 class TareasController extends Controller
 {
-    
     public function index()
     {
-        $clientes = Cliente::all();
-        $operarios = Empleado::all()->filter(function ($empleado) {
-            return $empleado->tipo === 'operario';
-        });
+        $tareas = Tarea::with(['cliente', 'empleado'])->paginate(7);
 
+        return view('nueva_tarea', compact('tareas'));
+    }
+
+    public function form()
+    {
+        $clientes = Cliente::all();
+        $operarios = Empleado::where('tipo', 'O')->get();
         return view('nueva_tarea', compact('clientes', 'operarios'));
     }
 
@@ -69,14 +72,6 @@ class TareasController extends Controller
     {
         $tarea = Tarea::find($id);
         return view('tarea', compact('tarea'));
-    }
-
-    public function verTareas()
-    {
-        $tareas = Tarea::paginate(7);
-        $clientes = Cliente::all();
-        $empleados = Empleado::all();
-        return view('ver_tareas', compact('tareas', 'clientes', 'empleados'));
     }
 
     public function borrarTarea($id)

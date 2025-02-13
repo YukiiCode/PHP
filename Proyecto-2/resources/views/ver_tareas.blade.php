@@ -38,7 +38,7 @@
                     <tbody>
                         @forelse ($tareas as $tarea)
                         <tr class="@if(request()->query('id') == $tarea->id) table-active @endif">
-                            <td>
+                            <td >
                                 @php
                                     $badgeClass = [
                                         'pendiente' => 'badge-danger',
@@ -46,7 +46,7 @@
                                         'completada' => 'badge-success'
                                     ][$tarea->estado] ?? 'badge-secondary';
                                 @endphp
-                                <span class="badge {{ $badgeClass }} badge-pill">{{ $tarea->estado }}</span>
+                                <span class="badge {{ $badgeClass }} badge-pill text-dark">{{ $tarea->estado }}</span>
                             </td>
                             <td>{{ $tarea->empleado ? $tarea->empleado->nombre : 'N/A' }}</td>
                             <td class="text-center">{{ \Carbon\Carbon::parse($tarea->fecha_creacion)->format('d/m/Y H:i') }}</td>
@@ -83,7 +83,7 @@
                                 <div class="p-3">
                                     <h5 class="mb-3"><i class="fas fa-file-alt mr-2"></i>Detalles adicionales</h5>
                                     
-                                    @if($tarea->archivos && $tarea->archivos->count() > 0)
+                                    @if($tarea->archivos && count($tarea->archivos) > 0)
                                     <div class="row">
                                         @foreach($tarea->archivos as $archivo)
                                         @php

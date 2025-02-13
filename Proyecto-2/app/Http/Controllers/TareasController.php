@@ -13,7 +13,7 @@ class TareasController extends Controller
     public function index()
     {
         $tareas = Tarea::with(['cliente', 'empleado'])->paginate(7);
-        return view('nueva_tarea', compact('tareas'));
+        return view('ver_tareas', compact('tareas'));
     }
 
     public function form()

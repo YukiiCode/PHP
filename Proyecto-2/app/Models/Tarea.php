@@ -9,13 +9,17 @@ class Tarea extends Model
     protected $table = 'tareas';
     protected $fillable = ['id', 'estado', 'operario_id', 'fecha_creacion', 'fecha_finalizacion', 'anotaciones', 'cliente_id'];
     public $timestamps = false;
+    protected $casts = [
+        'fotos_trabajo' => 'array', // Convierte el JSON a un array automáticamente
+    ];
 
     public function cliente()
     {
         return $this->belongsTo(Cliente::class, 'cliente_id');
     }
 
-    public function empleado(){
+    public function empleado()
+    {
         return $this->belongsTo(Empleado::class, 'operario_id');
     }
 

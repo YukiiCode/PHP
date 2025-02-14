@@ -23,6 +23,13 @@ class TareasController extends Controller
         return view('nueva_tarea', compact('clientes', 'operarios'));
     }
 
+    public function edit($id)
+    {
+        $tarea = Tarea::with(['cliente', 'empleado'])->find($id);
+        $operarios = Empleado::where('tipo', 'operario')->get();
+        return view('editar_tarea', compact(['tarea', 'operarios']));
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -65,6 +72,47 @@ class TareasController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Hubo un problema al guardar la tarea: ' . $e->getMessage())->withInput();
         }
+    }
+
+    public function actualizar(Request $request, $id)
+    {
+        $tarea = Tarea::findOrFail($id);
+
+        // Validación
+        $request->validate([
+            'operario_id' => 'required|exists:operarios,id',
+            'fecha_realizacion' => 'nullable|date',
+            'cliente_id' => 'required|exists:clientes,id',
+            'estado' => 'required|in:F,T,C,E',
+            'anotaciones' => 'nullable|string',
+            'fichero_resumen' => 'nullable|file|mimes:pdf',
+            'fotos_trabajo' => 'nullable|array',
+            'fotos_trabajo.*' => 'nullable|image',
+        ]);
+
+        // Actualizar campos
+        $tarea->update([
+            'operario_id' => $request->operario_id,
+            'fecha_realizacion' => $request->fecha_realizacion,
+            'cliente_id' => $request->cliente_id,
+            'estado' => $request->estado,
+            'anotaciones' => $request->anotaciones,
+        ]);
+
+        // Manejar archivos adjuntos
+        if ($request->hasFile('fichero_resumen')) {
+            $tarea->fichero_resumen = $request->file('fichero_resumen')->store('resumenes');
+            $tarea->save();
+        }
+
+        if ($request->hasFile('fotos_trabajo')) {
+            foreach ($request->file('fotos_trabajo') as $foto) {
+                $ruta = $foto->store('fotos');
+                $tarea->fotos()->create(['ruta' => $ruta]);
+            }
+        }
+
+        return redirect()->route('listado-tareas')->with('success', 'Tarea actualizada correctamente.');
     }
 
     public function show($id)

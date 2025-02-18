@@ -15,7 +15,7 @@
         <div class="card-body p-4">
             <div class="row mb-4">
                 <div class="col-12">
-                    <h4 class="text-muted mb-4">Bienvenido, {{ Auth::user()->name ?? 'Usuario' }}</h4>
+                    <h4 class="text-muted mb-4">Bienvenido, {{ Auth::user()->empleado->nombre ?? 'Usuario' }}</h4>
                 </div>
             </div>
             <!-- Acciones Principales -->

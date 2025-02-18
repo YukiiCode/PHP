@@ -86,7 +86,7 @@
                         </tr>
                         @if(request()->query('id') == $tarea->id)
                         <tr class="table-info">
-                            <td colspan="7">
+                            <td colspan="8">
                                 <div class="p-3">
                                     <h5 class="mb-3"><i class="fas fa-file-alt mr-2"></i>Detalles adicionales</h5>
 

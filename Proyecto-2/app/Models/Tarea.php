@@ -34,12 +34,16 @@ class Tarea extends Model
         }
 
         // Agregar cada foto del trabajo si existe
-        $fotos = json_decode($this->fotos_trabajo, true);
-        if (is_array($fotos)) {
-            foreach ($fotos as $foto) {
-                $archivos[] = (object) ['ruta' => $foto];
-            }
+        $fotos = $this->fotos_trabajo;
+
+        if (empty($fotos)) {
+            return $archivos;
         }
+        
+        foreach ($fotos as $foto) {
+            $archivos[] = (object) ['ruta' => $foto];
+        }
+
 
         return $archivos;
     }

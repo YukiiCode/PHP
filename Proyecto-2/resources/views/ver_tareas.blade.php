@@ -38,13 +38,13 @@
                     <tbody>
                         @forelse ($tareas as $tarea)
                         <tr class="@if(request()->query('id') == $tarea->id) table-active @endif">
-                            <td >
+                            <td>
                                 @php
-                                    $badgeClass = [
-                                        'pendiente' => 'badge-danger',
-                                        'en proceso' => 'badge-warning',
-                                        'completada' => 'badge-success'
-                                    ][$tarea->estado] ?? 'badge-secondary';
+                                $badgeClass = [
+                                'pendiente' => 'badge-danger',
+                                'en proceso' => 'badge-warning',
+                                'completada' => 'badge-success'
+                                ][$tarea->estado] ?? 'badge-secondary';
                                 @endphp
                                 <span class="badge {{ $badgeClass }} badge-pill text-dark">{{ $tarea->estado }}</span>
                             </td>
@@ -59,19 +59,19 @@
                             <td>{{ $tarea->cliente ? $tarea->cliente->nombre : 'N/A' }}</td>
                             <td class="text-center">
                                 <div class="btn-group" role="group">
-                                    <a href="#" class="btn btn-primary btn-sm" data-toggle="tooltip" title="Editar">
+                                    <a href="{{ route('editar-tarea',['id' => $tarea->id]) }}" class="btn btn-primary btn-sm" data-toggle="tooltip" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="{{ route('borrar-tarea', ['id' => $tarea->id]) }}" 
-                                       class="btn btn-danger btn-sm" 
-                                       data-toggle="tooltip" 
-                                       title="Eliminar">
+                                    <a href="{{ route('confirmar-borrado-tarea', ['id' => $tarea->id,'page'=> request()->query('page')]) }}"
+                                        class="btn btn-danger btn-sm"
+                                        data-toggle="tooltip"
+                                        title="Eliminar">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                     <a href="@if (request()->query('id') == $tarea->id) {{ route('ver-tareas', ['page'=> request()->query('page')]) }} @else {{ route('ver-tareas', ['id'=>$tarea->id, 'page'=>request()->query('page')]) }} @endif"
-                                       class="btn btn-secondary btn-sm" 
-                                       data-toggle="tooltip" 
-                                       title="@if(request()->query('id') == $tarea->id) Ocultar detalles @else Ver detalles @endif">
+                                        class="btn btn-secondary btn-sm"
+                                        data-toggle="tooltip"
+                                        title="@if(request()->query('id') == $tarea->id) Ocultar detalles @else Ver detalles @endif">
                                         <i class="fas @if(request()->query('id') == $tarea->id) fa-chevron-up @else fa-chevron-down @endif"></i>
                                     </a>
                                 </div>
@@ -82,15 +82,15 @@
                             <td colspan="7">
                                 <div class="p-3">
                                     <h5 class="mb-3"><i class="fas fa-file-alt mr-2"></i>Detalles adicionales</h5>
-                                    
+
                                     @if($tarea->archivos && count($tarea->archivos) > 0)
                                     <div class="row">
                                         @foreach($tarea->archivos as $archivo)
                                         @php
-                                            $archivoUrl = Storage::url($archivo->ruta);
-                                            $extension = pathinfo($archivo->ruta, PATHINFO_EXTENSION);
+                                        $archivoUrl = Storage::url($archivo->ruta);
+                                        $extension = pathinfo($archivo->ruta, PATHINFO_EXTENSION);
                                         @endphp
-                                        
+
                                         <div class="col-md-4 mb-3">
                                             <div class="card h-100 shadow-sm">
                                                 <div class="card-body text-center">
@@ -147,4 +147,48 @@
         </div>
     </div>
 </div>
+
+@if (Request::is('confirmar-borrado-tarea/*'))
+@php
+$id = Request::route('id'); // Obtiene el ID de la ruta
+@endphp
+<div class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar Borrado</h5>
+                <a href="{{ route('ver-tareas', ['page'=> request()->query('page')]) }}" class="btn-close" aria-label="Close"></a>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas borrar la siguiente tarea?</p>
+
+                <!-- Resumen de la tarea -->
+                @if(isset($tarea))
+                <ul>
+                    <li><strong>ID:</strong> {{ $tarea->id }}</li>
+                    <li><strong>Estado:</strong> {{ $tarea->estado }}</li>
+                    <li><strong>Operario:</strong> {{ $tarea->empleado ? $tarea->empleado->nombre : 'N/A' }}</li>
+                    <li><strong>Creación:</strong> {{ \Carbon\Carbon::parse($tarea->fecha_creacion)->format('d/m/Y H:i') }}</li>
+                    <li><strong>Finalización:</strong> {{ $tarea->fecha_finalizacion ? \Carbon\Carbon::parse($tarea->fecha_finalizacion)->format('d/m/Y H:i') : 'N/A' }}</li>
+                    <li><strong>Anotaciones:</strong> {{ Str::limit($tarea->anotaciones, 30) }}</li>
+                    <li><strong>Cliente:</strong> {{ $tarea->cliente ? $tarea->cliente->nombre : 'N/A' }}</li>
+                </ul>
+                @else
+                <p>No se encontró la tarea.</p>
+                @endif
+            </div>
+            <div class="modal-footer">
+                <a href="{{ route('ver-tareas', ['page'=> request()->query('page')]) }}" class="btn btn-secondary">Cancelar</a>
+                <form action="{{ route('borrar-tarea', ['id' => $id]) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Sí, borrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endif
+
 @endsection

@@ -19,6 +19,7 @@ Route::post('/upload', [FileController::class, 'upload'])->name('upload');
 Route::get('/nueva-tarea', [TareasController::class, 'form'])->name('nueva-tarea');
 Route::post('/nueva-tarea', [TareasController::class, 'store']);
 Route::get('/editar-tarea/{id}', [TareasController::class, 'edit'])->name('editar-tarea');
+Route::get('/confirmar-borrado-tarea/{id}', [TareasController::class, 'index'])->name('confirmar-borrado-tarea');
 Route::get('/borrar-tarea/{id}', [TareasController::class, 'borrarTarea'])->name('borrar-tarea');
 Route::post('/actualizar-tarea/{id}', [TareasController::class, 'update'])->name('actualizar-tarea');
 

@@ -27,7 +27,8 @@ class TareasController extends Controller
     {
         $tarea = Tarea::with(['cliente', 'empleado'])->find($id);
         $operarios = Empleado::where('tipo', 'operario')->get();
-        return view('editar_tarea', compact(['tarea', 'operarios']));
+        $clientes = Cliente::all();
+        return view('editar_tarea', compact(['tarea', 'operarios', 'clientes']));
     }
 
     public function store(Request $request)
@@ -127,4 +128,5 @@ class TareasController extends Controller
         $tarea->delete();
         return redirect()->route('ver-tareas');
     }
+
 }

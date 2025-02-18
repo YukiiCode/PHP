@@ -12,4 +12,11 @@ class FileController extends Controller
         $path = $request->file('file')->store('uploads');
         return back()->with('success', 'Archivo subido con éxito. Ruta: ' . $path);
     }
+
+    public function delete()
+    {
+        $path = request('path');
+        Storage::delete($path);
+        return back()->with('success', 'Archivo eliminado con éxito.');
+    }
 }

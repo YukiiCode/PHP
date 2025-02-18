@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,14 +14,33 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
         .navbar {
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         footer {
             box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
         }
+
+        .modal {
+            display: flex;
+            /* Esto asegura que la modal esté oculta inicialmente */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Fondo oscuro semi-transparente */
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
     </style>
 </head>
+
 <body class="bg-light">
     <!-- Barra de navegación -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary py-3">
@@ -125,4 +145,5 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

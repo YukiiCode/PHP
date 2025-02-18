@@ -26,31 +26,38 @@
                 <table class="table table-hover table-bordered mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th>Estado</th>
-                            <th>Operario</th>
+                            <th class="text-center">Id</th>
+                            <th class="text-center">Estado</th>
+                            <th class="text-center">Operario</th>
                             <th class="text-center">Creación</th>
                             <th class="text-center">Finalización</th>
-                            <th>Anotaciones</th>
-                            <th>Cliente</th>
+                            <th class="text-center">Anotaciones</th>
+                            <th class="text-center">Cliente</th>
                             <th class="text-center" style="width: 150px;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($tareas as $tarea)
                         <tr class="@if(request()->query('id') == $tarea->id) table-active @endif">
-                            <td>
+                            <td class="text-center">{{$tarea->id}}</td>
+                            <td class="text-center">
                                 @php
-                                $badgeClass = [
-                                'pendiente' => 'badge-danger',
-                                'en proceso' => 'badge-warning',
-                                'completada' => 'badge-success'
-                                ][$tarea->estado] ?? 'badge-secondary';
+                                $estados = [
+                                'F' => ['descripcion' => 'Finalizada', 'clase' => 'bg-success'],
+                                'T' => ['descripcion' => 'En proceso', 'clase' => 'bg-warning'],
+                                'C' => ['descripcion' => 'Cancelada', 'clase' => 'bg-danger'],
+                                'A' => ['descripcion' => 'Por Aprobar', 'clase' => 'bg-secondary'],
+                                'E' => ['descripcion' => 'Pausada', 'clase' => 'bg-info'],
+                                ];
+                                $estadoActual = $estados[$tarea->estado] ?? ['descripcion' => 'Desconocido', 'clase' => 'badge-dark'];
                                 @endphp
-                                <span class="badge {{ $badgeClass }} badge-pill text-dark">{{ $tarea->estado }}</span>
+                                <span class="badge badge-pill {{ $estadoActual['clase'] }}">
+                                    {{ $estadoActual['descripcion'] }}
+                                </span>
                             </td>
                             <td>{{ $tarea->empleado ? $tarea->empleado->nombre : 'N/A' }}</td>
                             <td class="text-center">{{ \Carbon\Carbon::parse($tarea->fecha_creacion)->format('d/m/Y H:i') }}</td>
-                            <td class="text-center">{{ $tarea->fecha_finalizacion ? \Carbon\Carbon::parse($tarea->fecha_finalizacion)->format('d/m/Y H:i') : 'N/A' }}</td>
+                            <td class="text-center">{{ $tarea->fecha_finalizacion ? \Carbon\Carbon::parse($tarea->fecha_finalizacion)->format('d/m/Y H:i') : '' }}</td>
                             <td>
                                 <span data-toggle="tooltip" title="{{ $tarea->anotaciones }}">
                                     {{ Str::limit($tarea->anotaciones, 30) }}
@@ -190,5 +197,7 @@ $id = Request::route('id'); // Obtiene el ID de la ruta
 </div>
 
 @endif
+
+
 
 @endsection

@@ -129,4 +129,10 @@ class TareasController extends Controller
         return redirect()->route('ver-tareas');
     }
 
+    public function indexClienteView(){
+        $clientes = Cliente::all();
+        $operarios = Empleado::where('tipo', 'operario')->get();
+        return view('acceso_cliente', compact('clientes', 'operarios'));
+    }
+
 }

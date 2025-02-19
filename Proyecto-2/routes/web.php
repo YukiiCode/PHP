@@ -22,6 +22,7 @@ Route::get('/editar-tarea/{id}', [TareasController::class, 'edit'])->name('edita
 Route::get('/confirmar-borrado-tarea/{id}', [TareasController::class, 'index'])->name('confirmar-borrado-tarea');
 Route::get('/borrar-tarea/{id}', [TareasController::class, 'borrarTarea'])->name('borrar-tarea');
 Route::post('/actualizar-tarea/{id}', [TareasController::class, 'update'])->name('actualizar-tarea');
+Route::get('/acceso-cliente', [TareasController::class, 'indexClienteView'])->name('acceso-cliente');
 
 // Clientes
 Route::get('/ver-clientes', [ClientesController::class, 'index'])->name('ver-clientes');

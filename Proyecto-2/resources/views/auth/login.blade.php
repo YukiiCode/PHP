@@ -71,7 +71,7 @@
                 <div class="card-header bg-secondary text-white">{{ __('¿Eres un cliente?') }}</div>
                 <div class="card-body text-center">
                     <p class="lead">Si deseas registrar una incidencia o tarea, haz clic en el botón a continuación:</p>
-                    <a href="" class="btn btn-success btn-lg">
+                    <a href=" {{ route('acceso-cliente') }} " class="btn btn-success btn-lg">
                         <i class="fas fa-plus-circle me-2"></i> Registrar Incidencia
                     </a>
                 </div>

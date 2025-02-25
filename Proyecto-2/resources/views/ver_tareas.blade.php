@@ -55,7 +55,7 @@
                                     {{ $estadoActual['descripcion'] }}
                                 </span>
                             </td>
-                            <td>{{ $tarea->empleado ? $tarea->empleado->nombre : 'N/A' }}</td>
+                            <td> {{ $tarea->empleado ? $tarea->empleado->nombre : 'N/A' }} </td>
                             <td class="text-center">{{ \Carbon\Carbon::parse($tarea->fecha_creacion)->format('d/m/Y H:i') }}</td>
                             <td class="text-center">{{ $tarea->fecha_finalizacion ? \Carbon\Carbon::parse($tarea->fecha_finalizacion)->format('d/m/Y H:i') : '' }}</td>
                             <td>
@@ -63,7 +63,7 @@
                                     {{ Str::limit($tarea->anotaciones, 30) }}
                                 </span>
                             </td>
-                            <td>{{ $tarea->cliente ? $tarea->cliente->nombre : 'N/A' }}</td>
+                            <td> <a href="{{ route('tarea.detalle-cliente',['id' => $tarea->cliente_id]) }}">{{ $tarea->cliente ? $tarea->cliente->nombre : 'N/A' }} </a></td>
                             <td class="text-center">
                                 <div class="btn-group" role="group">
                                     <a href="{{ route('editar-tarea',['id' => $tarea->id]) }}" class="btn btn-primary btn-sm" data-toggle="tooltip" title="Editar">
@@ -158,35 +158,34 @@
 @if (Request::is('confirmar-borrado-tarea/*'))
 @php
 $id = Request::route('id'); // Obtiene el ID de la ruta
+$tarea = $tareas->firstWhere('id', $id);
 @endphp
-<div class="modal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
+<div class="modal fade show" tabindex="-1" role="dialog" style="display: block;">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content shadow-lg">
+            <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title">Confirmar Borrado</h5>
-                <a href="{{ route('ver-tareas', ['page'=> request()->query('page')]) }}" class="btn-close" aria-label="Close"></a>
+                <a href="{{ route('ver-tareas', ['page'=> request()->query('page')]) }}" class="btn-close btn-close-white" aria-label="Close"></a>
             </div>
             <div class="modal-body">
-                <p>¿Estás seguro de que deseas borrar la siguiente tarea?</p>
-
-                <!-- Resumen de la tarea -->
+                <p class="mb-3">¿Estás seguro de que deseas borrar la siguiente tarea?</p>
                 @if(isset($tarea))
-                <ul>
-                    <li><strong>ID:</strong> {{ $tarea->id }}</li>
-                    <li><strong>Estado:</strong> {{ $tarea->estado }}</li>
-                    <li><strong>Operario:</strong> {{ $tarea->empleado ? $tarea->empleado->nombre : 'N/A' }}</li>
-                    <li><strong>Creación:</strong> {{ \Carbon\Carbon::parse($tarea->fecha_creacion)->format('d/m/Y H:i') }}</li>
-                    <li><strong>Finalización:</strong> {{ $tarea->fecha_finalizacion ? \Carbon\Carbon::parse($tarea->fecha_finalizacion)->format('d/m/Y H:i') : 'N/A' }}</li>
-                    <li><strong>Anotaciones:</strong> {{ Str::limit($tarea->anotaciones, 30) }}</li>
-                    <li><strong>Cliente:</strong> {{ $tarea->cliente ? $tarea->cliente->nombre : 'N/A' }}</li>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>ID:</strong> {{ $tarea->id }}</li>
+                    <li class="list-group-item"><strong>Estado:</strong> {{ $tarea->estado }}</li>
+                    <li class="list-group-item"><strong>Operario:</strong> {{ $tarea->empleado ? $tarea->empleado->nombre : 'N/A' }}</li>
+                    <li class="list-group-item"><strong>Creación:</strong> {{ \Carbon\Carbon::parse($tarea->fecha_creacion)->format('d/m/Y H:i') }}</li>
+                    <li class="list-group-item"><strong>Finalización:</strong> {{ $tarea->fecha_finalizacion ? \Carbon\Carbon::parse($tarea->fecha_finalizacion)->format('d/m/Y H:i') : 'N/A' }}</li>
+                    <li class="list-group-item"><strong>Anotaciones:</strong> {{ Str::limit($tarea->anotaciones, 30) }}</li>
+                    <li class="list-group-item"><strong>Cliente:</strong> {{ $tarea->cliente ? $tarea->cliente->nombre : 'N/A' }}</li>
                 </ul>
                 @else
-                <p>No se encontró la tarea.</p>
+                <p class="text-muted">No se encontró la tarea.</p>
                 @endif
             </div>
             <div class="modal-footer">
                 <a href="{{ route('ver-tareas', ['page'=> request()->query('page')]) }}" class="btn btn-secondary">Cancelar</a>
-                <form action="{{ route('borrar-tarea', ['id' => $id]) }}" method="POST">
+                <form action="{{ route('borrar-tarea', ['id' => $id]) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Sí, borrar</button>
@@ -195,9 +194,41 @@ $id = Request::route('id'); // Obtiene el ID de la ruta
         </div>
     </div>
 </div>
-
 @endif
 
-
+@if (Request::is('ver-tareas/detalle-cliente/*'))
+@php
+$id = Request::route('id'); // Obtiene el ID de la ruta
+$cliente = $tareas->firstWhere('cliente_id', $id)->cliente;
+@endphp
+<div class="modal fade show" tabindex="-1" role="dialog" style="display: block;">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content shadow-lg">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Detalles del Cliente</h5>
+                <a href="{{ route('ver-tareas', ['page'=> request()->query('page')]) }}" class="btn-close btn-close-white" aria-label="Close"></a>
+            </div>
+            <div class="modal-body">
+                @if(isset($cliente))
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>ID:</strong> {{ $cliente->id }}</li>
+                    <li class="list-group-item"><strong>Nombre:</strong> {{ $cliente->nombre }}</li>
+                    <li class="list-group-item"><strong>CIF:</strong> {{ $cliente->cif }}</li>
+                    <li class="list-group-item"><strong>Teléfono:</strong> {{ $cliente->telefono }}</li>
+                    <li class="list-group-item"><strong>Correo Electrónico:</strong> {{ $cliente->correo }}</li>
+                    <li class="list-group-item"><strong>Dirección:</strong> {{ $cliente->direccion ?? 'N/A' }}</li>
+                    <li class="list-group-item"><strong>Fecha de Registro:</strong> {{ \Carbon\Carbon::parse($cliente->created_at)->format('d/m/Y H:i') }}</li>
+                </ul>
+                @else
+                <p class="text-muted">No se encontró el cliente.</p>
+                @endif
+            </div>
+            <div class="modal-footer">
+                <a href="{{ route('ver-tareas', ['page'=> request()->query('page')]) }}" class="btn btn-secondary">Cerrar</a>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
 
 @endsection

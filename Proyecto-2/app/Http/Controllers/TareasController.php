@@ -6,7 +6,6 @@ use App\Models\Cliente;
 use App\Models\Empleado;
 use Illuminate\Http\Request;
 use App\Models\Tarea;
-use Illuminate\Support\Facades\Validator;
 
 class TareasController extends Controller
 {
@@ -33,15 +32,17 @@ class TareasController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'cliente_id' => 'required',
-            'operario_id' => 'required',
-            'anotaciones' => 'required',
-            'fichero_resumen' => 'required|file|mimes:pdf',
-            'fotos_trabajo.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        // Add validation rules
+        $request->validate([
+            'cliente_id' => 'required|exists:clientes,id',
+            'operario_id' => 'required|exists:empleados,id',
+            'anotaciones' => 'nullable|string',
+            'fecha_creacion' => 'nullable|date',
+            'fecha_finalizacion' => 'nullable|date',
+            'estado' => 'required|in:F,T,C,A,E',
+            'fichero_resumen' => 'nullable|file|mimes:pdf,doc,docx',
+            'fotos_trabajo.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
-
-        // No validation code here
 
         try {
             // Guardar el fichero resumen
@@ -62,7 +63,7 @@ class TareasController extends Controller
             $tarea->cliente_id = $request->cliente_id;
             $tarea->operario_id = $request->operario_id;
             $tarea->anotaciones = $request->anotaciones;
-            $tarea->fecha_creacion = $request->fecha_creacion ?? date('Y-m-d');
+            $tarea->fecha_creacion =  date('d-m-y');
             $tarea->fecha_finalizacion = $request->fecha_finalizacion;
             $tarea->estado = $request->estado ?? 'E';
             $tarea->fichero_resumen = $ficheroResumenPath ?? null;
@@ -129,10 +130,10 @@ class TareasController extends Controller
         return redirect()->route('ver-tareas');
     }
 
-    public function indexClienteView(){
+    public function indexClienteView()
+    {
         $clientes = Cliente::all();
         $operarios = Empleado::where('tipo', 'operario')->get();
         return view('acceso_cliente', compact('clientes', 'operarios'));
     }
-
 }

@@ -16,6 +16,13 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        .pdf-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+        }
+
         .navbar {
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
@@ -38,7 +45,6 @@
             align-items: center;
             z-index: 999;
         }
-
     </style>
 </head>
 

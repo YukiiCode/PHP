@@ -1,5 +1,5 @@
 @extends('plantilla')
-
+@section('titulo', 'Login')
 @section('contenido')
 <div class="container">
     <div class="row justify-content-center">

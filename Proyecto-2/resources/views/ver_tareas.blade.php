@@ -7,19 +7,6 @@
             <h3 class="card-title mb-0"><i class="fas fa-tasks mr-2"></i> Listado Tareas</h3>
         </div>
         <div class="card-body">
-            @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <h5 class="alert-heading"><i class="fas fa-exclamation-circle mr-2"></i>Error en el formulario</h5>
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            @endif
 
             <!-- Tabla de Tareas -->
             <div class="table-responsive">
@@ -102,16 +89,16 @@
                                             <div class="card h-100 shadow-sm">
                                                 <div class="card-body text-center">
                                                     @if($extension === 'pdf')
-                                                    <div class="mb-2">
-                                                        <i class="fas fa-file-pdf fa-3x text-danger"></i>
-                                                    </div>
-                                                    <div class="btn-group">
-                                                        <a href="{{ $archivoUrl }}" target="_blank" class="btn btn-outline-danger btn-sm">
-                                                            <i class="fas fa-eye mr-1"></i>Ver
-                                                        </a>
-                                                        <a href="{{ $archivoUrl }}" download class="btn btn-danger btn-sm">
-                                                            <i class="fas fa-download mr-1"></i>Descargar
-                                                        </a>
+                                                    <div class="pdf-container">
+                                                        <iframe src="{{ $archivoUrl }}" class="pdf-viewer mb-2" frameborder="0"></iframe>
+                                                        <div class="btn-group mt-2">
+                                                            <a href="{{ $archivoUrl }}" target="_blank" class="btn btn-outline-danger btn-sm">
+                                                                <i class="fas fa-external-link-alt mr-1"></i>Abrir
+                                                            </a>
+                                                            <a href="{{ $archivoUrl }}" download class="btn btn-danger btn-sm">
+                                                                <i class="fas fa-download mr-1"></i>Descargar
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                     @elseif(in_array($extension, ['jpg','jpeg','png','gif']))
                                                     <img src="{{ $archivoUrl }}" class="img-thumbnail mb-2" style="max-height: 150px;">
@@ -119,9 +106,6 @@
                                                         <i class="fas fa-download mr-1"></i>Descargar imagen
                                                     </a>
                                                     @endif
-                                                </div>
-                                                <div class="card-footer small text-muted">
-                                                    {{ basename($archivo->ruta) }}
                                                 </div>
                                             </div>
                                         </div>

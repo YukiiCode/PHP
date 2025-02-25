@@ -50,20 +50,28 @@
                                     {{ Str::limit($tarea->anotaciones, 30) }}
                                 </span>
                             </td>
-                            <td> <a href="{{ route('tarea.detalle-cliente',['id' => $tarea->cliente_id]) }}">{{ $tarea->cliente ? $tarea->cliente->nombre : 'N/A' }} </a></td>
+                            <td> 
+                                <a href="{{ route('tarea.detalle-cliente',['id' => $tarea->cliente_id]) }}" 
+                                   class="btn btn-outline-info btn-sm text-decoration-none"
+                                   data-toggle="tooltip" 
+                                   title="Ver detalles del cliente">
+                                    <i class="fas fa-user mr-1"></i>
+                                    {{ $tarea->cliente ? $tarea->cliente->nombre : 'N/A' }}
+                                </a>
+                            </td>
                             <td class="text-center">
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('editar-tarea',['id' => $tarea->id]) }}" class="btn btn-primary btn-sm" data-toggle="tooltip" title="Editar">
+                                    <a href="{{ route('editar-tarea',['id' => $tarea->id]) }}" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <a href="{{ route('confirmar-borrado-tarea', ['id' => $tarea->id,'page'=> request()->query('page')]) }}"
-                                        class="btn btn-danger btn-sm"
+                                        class="btn btn-outline-danger btn-sm"
                                         data-toggle="tooltip"
                                         title="Eliminar">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                     <a href="@if (request()->query('id') == $tarea->id) {{ route('ver-tareas', ['page'=> request()->query('page')]) }} @else {{ route('ver-tareas', ['id'=>$tarea->id, 'page'=>request()->query('page')]) }} @endif"
-                                        class="btn btn-secondary btn-sm"
+                                        class="btn btn-outline-secondary btn-sm"
                                         data-toggle="tooltip"
                                         title="@if(request()->query('id') == $tarea->id) Ocultar detalles @else Ver detalles @endif">
                                         <i class="fas @if(request()->query('id') == $tarea->id) fa-chevron-up @else fa-chevron-down @endif"></i>
@@ -95,14 +103,14 @@
                                                             <a href="{{ $archivoUrl }}" target="_blank" class="btn btn-outline-danger btn-sm">
                                                                 <i class="fas fa-external-link-alt mr-1"></i>Abrir
                                                             </a>
-                                                            <a href="{{ $archivoUrl }}" download class="btn btn-danger btn-sm">
+                                                            <a href="{{ $archivoUrl }}" download class="btn btn-outline-danger btn-sm">
                                                                 <i class="fas fa-download mr-1"></i>Descargar
                                                             </a>
                                                         </div>
                                                     </div>
                                                     @elseif(in_array($extension, ['jpg','jpeg','png','gif']))
                                                     <img src="{{ $archivoUrl }}" class="img-thumbnail mb-2" style="max-height: 150px;">
-                                                    <a href="{{ $archivoUrl }}" download class="btn btn-primary btn-sm btn-block">
+                                                    <a href="{{ $archivoUrl }}" download class="btn btn-outline-primary btn-sm btn-block">
                                                         <i class="fas fa-download mr-1"></i>Descargar imagen
                                                     </a>
                                                     @endif

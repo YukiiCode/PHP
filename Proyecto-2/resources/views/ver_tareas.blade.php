@@ -190,7 +190,7 @@ $cliente = $tareas->firstWhere('cliente_id', $id)->cliente;
         <div class="modal-content shadow-lg">
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title">Detalles del Cliente</h5>
-                <a href="{{ route('ver-tareas', ['page'=> request()->query('page')]) }}" class="btn-close btn-close-white" aria-label="Close"></a>
+                <a href="{{ route('ver-tareas',['page'=> request()->query('page')]) }}" class="btn-close btn-close-white" aria-label="Close"></a>
             </div>
             <div class="modal-body">
                 @if(isset($cliente))
@@ -208,7 +208,7 @@ $cliente = $tareas->firstWhere('cliente_id', $id)->cliente;
                 @endif
             </div>
             <div class="modal-footer">
-                <a href="{{ route('ver-tareas', ['page'=> request()->query('page')]) }}" class="btn btn-secondary">Cerrar</a>
+                <a href="{{ route('ver-tareas', ['page'=> request()->query('page')])  }}" class="btn btn-secondary">Cerrar</a>
             </div>
         </div>
     </div>

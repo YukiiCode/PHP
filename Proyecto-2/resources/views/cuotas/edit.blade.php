@@ -14,6 +14,8 @@
             <form method="POST" action="{{ route('cuotas.update', $cuota->id) }}">
                 @csrf
                 @method('PUT')
+                @csrf
+                @method('PUT')
                 
                 <div class="row g-3">
                     <div class="col-md-6">

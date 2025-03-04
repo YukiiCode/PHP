@@ -11,7 +11,7 @@
         </div>
         
         <div class="card-body">
-            <form method="POST" action="{{ route('cuotas.storeBatch') }}">
+            <form method="POST" action="{{ route('cuotas.batch.store') }}">
                 @csrf
                 
                 <div class="mb-3">

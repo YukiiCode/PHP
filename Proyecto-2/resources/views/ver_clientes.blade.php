@@ -50,7 +50,7 @@
                                         aria-label="Gestión de cuotas">
                                         <i class="fas fa-coins me-1"></i>Cuotas
                                     </button>
-                                    <form action="{{ route('eliminar-cliente', $cliente->id) }}" method="POST" class="d-inline">
+                                    <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" 

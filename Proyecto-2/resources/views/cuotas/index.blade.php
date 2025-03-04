@@ -15,7 +15,7 @@
                     <a href="{{ route('cuotas.create') }}" class="btn btn-primary btn-sm">
                         <i class="fas fa-plus me-1"></i> Nueva Cuota
                     </a>
-                    <a href="{{ route('cuotas.batch') }}" class="btn btn-success btn-sm">
+                    <a href="{{ route('cuotas.batch.create') }}" class="btn btn-success btn-sm">
                         <i class="fas fa-copy me-1"></i> Generar Mensuales
                     </a>
                 </div>
@@ -74,7 +74,7 @@
                                 <a href="{{ route('cuotas.edit', $cuota->id) }}" class="btn btn-sm btn-outline-secondary" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <a href="{{ route('cuotas.pdf', $cuota->id) }}" class="btn btn-sm btn-outline-primary" title="Descargar PDF">
+                                <a href="{{ route('cuotas.download', $cuota->id) }}" class="btn btn-sm btn-outline-primary" title="Descargar PDF">
                                     <i class="fas fa-file-pdf"></i>
                                 </a>
                                 <form action="{{ route('cuotas.email', $cuota->id) }}" method="POST" style="display: inline-block;">

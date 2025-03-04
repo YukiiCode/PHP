@@ -18,29 +18,18 @@
             </thead>
             <tbody>
                 @foreach($empleados as $empleado)
-                <tr>
-                    <td>{{ $empleado->nombre }}</td>
-                    <td>{{ $empleado->dni }}</td>
-                    <td>{{ $empleado->correo }}</td>
-                    <td>{{ $empleado->telefono }}</td>
-                    <td>{{ $empleado->tipo }}</td>
+                <tr data-toggle="collapse" data-target="#detalles{{$empleado->id}}" style="cursor: pointer;">
+                    <td>{{$empleado->nombre}}</td>
+                    <td>{{$empleado->dni}}</td>
+                    <td>{{$empleado->correo}}</td>
+                    <td>{{$empleado->telefono}}</td>
+                    <td>{{$empleado->tipo}}</td>
                     <td>
-                        <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#details-{{ $empleado->id }}">
-                            ▼ Detalles
-                        </button>
-                        <a href="{{ route('empleados.edit', $empleado->id) }}" class="btn btn-sm btn-warning">
-                            ✏️ Editar
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="6" class="collapse" id="details-{{ $empleado->id }}">
-                        <div class="p-3 bg-light">
-                            <p>Correo: {{ $empleado->correo }}</p>
-                            <p>Dirección: {{ $empleado->direccion }}</p>
-                            <p>Fecha Alta: {{ optional($empleado->fecha_alta)->format('d/m/Y') }}</p>
-                            <p>Tiempo en la empresa: {{ optional($empleado->fecha_alta)->diffForHumans() }}</p>
-                        </div>
+                        <form action="{{route('empleados.destroy', $empleado->id)}}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm ml-1" onclick="return confirm('¿Eliminar empleado?')">Eliminar</button>
+                        </form>
                     </td>
                 </tr>
                 <tr>
@@ -48,7 +37,7 @@
                         <div id="detalles{{$empleado->id}}" class="collapse">
                             <p><strong>DNI:</strong> {{$empleado->dni}}</p>
                             <p><strong>Dirección:</strong> {{$empleado->direccion}}</p>
-                            <p><strong>Fecha Alta:</strong> {{ optional($empleado->fecha_alta)->format('d/m/Y') }}</p>
+                            <p><strong>Fecha Alta:</strong> {{$empleado->fecha_alta}}</p>
                             <p><strong>Tipo:</strong> {{$empleado->tipo}}</p>
                         </div>
                     </td>

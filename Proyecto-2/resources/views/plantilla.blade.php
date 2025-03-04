@@ -29,8 +29,6 @@
         footer {
             box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
         }
-
-        
     </style>
 </head>
 
@@ -60,19 +58,17 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownTareas">
                             <li>
-                                <a class="dropdown-item" href="{{ route('nueva-tarea') }}">
+                                <a class="dropdown-item" href="{{ route('tareas.create') }}">
                                     <i class="fas fa-plus-circle me-2"></i>Nueva Tarea
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ route('ver-tareas') }}">
+                                <a class="dropdown-item" href="{{ route('tareas.index') }}">
                                     <i class="fas fa-list me-2"></i>Ver Tareas
                                 </a>
                             </li>
                         </ul>
                     </li>
-
-
 
                     @if(Auth::user()->empleado->tipo !== 'operario')
                     <!-- Menú desplegable para Empleados -->
@@ -82,13 +78,13 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownEmpleados">
                             <li>
-                                <a class="dropdown-item" href="{{ route('ver-empleados') }}">
+                                <a class="dropdown-item" href="{{ route('empleados.index') }}">
                                     <i class="fas fa-list me-2"></i>Ver Empleados
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ route('nuevo-cliente') }}">
-                                    <i class="fas fa-plus-circle me-2"></i>Nuevo Cliente
+                                <a class="dropdown-item" href="{{ route('empleados.create') }}">
+                                    <i class="fas fa-plus-circle me-2"></i>Nuevo Empleado
                                 </a>
                             </li>
                         </ul>
@@ -99,20 +95,20 @@
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownClientes" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user-tie me-1"></i> Clientes
                         </a>
-                        @endif
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownClientes">
                             <li>
-                                <a class="dropdown-item" href="{{ route('ver-clientes') }}">
+                                <a class="dropdown-item" href="{{ route('clientes.index') }}">
                                     <i class="fas fa-list me-2"></i>Ver Clientes
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="{{ route('clientes.create') }}">
                                     <i class="fas fa-plus-circle me-2"></i>Nuevo Cliente
                                 </a>
                             </li>
                         </ul>
                     </li>
+                    @endif
 
                     @if(Auth::check())
                     <!-- Menú de usuario -->
@@ -140,17 +136,16 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link collapsed" href="{{ route('cuotas.index') }}">
-                            <i class="fas fa-euro-sign me-2"></i>
-                            Gestión de Cuotas
+                        <a class="nav-link" href="{{ route('cuotas.index') }}">
+                            <i class="fas fa-euro-sign me-2"></i>Gestión de Cuotas
                         </a>
                     </li>
                     @endif
 
                 </ul>
             </div>
+            @endif
         </div>
-        @endif
     </nav>
 
     <!-- Contenido principal -->

@@ -24,10 +24,10 @@
                             <h4 class="card-title fw-bold">Gestión de Tareas</h4>
                             <p class="card-text text-muted small">Administra las tareas del sistema.</p>
                             <div class="d-grid gap-2">
-                                <a href="{{ route('ver-tareas') }}" class="btn btn-primary rounded-pill">
+                                <a href="{{ route('tareas.index') }}" class="btn btn-primary rounded-pill">
                                     <i class="fas fa-list me-1"></i>Ver todas
                                 </a>
-                                <a href="{{ route('nueva-tarea') }}" class="btn btn-success rounded-pill">
+                                <a href="{{ route('tareas.create') }}" class="btn btn-success rounded-pill">
                                     <i class="fas fa-plus me-1"></i>Nueva tarea
                                 </a>
                             </div>
@@ -43,7 +43,7 @@
                             <h4 class="card-title fw-bold">Gestión de Empleados</h4>
                             <p class="card-text text-muted small">Administra los operarios del sistema.</p>
                             <div class="d-grid gap-2">
-                                <a href="{{ route('ver-empleados') }}" class="btn btn-primary rounded-pill">
+                                <a href="{{ route('empleados.index') }}" class="btn btn-primary rounded-pill">
                                     <i class="fas fa-list me-1"></i>Ver todos
                                 </a>
                                 <a href="" class="btn btn-success rounded-pill">
@@ -62,10 +62,10 @@
                             <h4 class="card-title fw-bold">Gestión de Clientes</h4>
                             <p class="card-text text-muted small">Administra los clientes del sistema.</p>
                             <div class="d-grid gap-2">
-                                <a href="{{ route('ver-clientes') }}" class="btn btn-primary rounded-pill">
+                                <a href="{{ route('clientes.index') }}" class="btn btn-primary rounded-pill">
                                     <i class="fas fa-list me-1"></i>Ver todos
                                 </a>
-                                <a href="" class="btn btn-success rounded-pill">
+                                <a href="{{ route('clientes.create') }}" class="btn btn-success rounded-pill">
                                     <i class="fas fa-plus me-1"></i>Nuevo cliente
                                 </a>
                             </div>

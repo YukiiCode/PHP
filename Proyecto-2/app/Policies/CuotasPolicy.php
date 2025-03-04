@@ -12,9 +12,4 @@ class CuotasPolicy
             return Response::allow();
         }
     }
-
-    public function update(User $user, Cuotas $cuota)
-    {
-        return $cuota->empleado_id === $user->id;
-    }
 }

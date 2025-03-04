@@ -51,7 +51,7 @@
                                 </span>
                             </td>
                             <td> 
-                                <a href="{{ route('tarea.detalle-cliente',['id' => $tarea->cliente_id]) }}" 
+                                <a href="{{ route('tareas.cliente-detail',['id' => $tarea->cliente_id]) }}" 
                                    class="btn btn-outline-info btn-sm text-decoration-none"
                                    data-toggle="tooltip" 
                                    title="Ver detalles del cliente">
@@ -62,17 +62,17 @@
                             <td class="text-center">
                                 <div class="btn-group" role="group">
                                     @if(Auth::user()->empleado->tipo !== 'operario')
-                                        <a href="{{ route('editar-tarea',['id' => $tarea->id]) }}" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" title="Editar">
+                                        <a href="{{ route('tareas.edit',['id' => $tarea->id]) }}" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" title="Editar">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                     @endif
-                                    <a href="{{ route('confirmar-borrado-tarea', ['id' => $tarea->id,'page'=> request()->query('page')]) }}"
+                                    <a href="{{ route('tareas.confirm-delete', ['id' => $tarea->id,'page'=> request()->query('page')]) }}"
                                         class="btn btn-outline-danger btn-sm"
                                         data-toggle="tooltip"
                                         title="Eliminar">
                                         <i class="fas fa-trash"></i>
                                     </a>
-                                    <a href="@if (request()->query('id') == $tarea->id) {{ route('ver-tareas', ['page'=> request()->query('page')]) }} @else {{ route('ver-tareas', ['id'=>$tarea->id, 'page'=>request()->query('page')]) }} @endif"
+                                    <a href="@if (request()->query('id') == $tarea->id) {{ route('tareas.index', ['page'=> request()->query('page')]) }} @else {{ route('tareas.index', ['id'=>$tarea->id, 'page'=>request()->query('page')]) }} @endif"
                                         class="btn btn-outline-secondary btn-sm"
                                         data-toggle="tooltip"
                                         title="@if(request()->query('id') == $tarea->id) Ocultar detalles @else Ver detalles @endif">
@@ -150,7 +150,7 @@
 </div>
 
 @if (Request::is('confirmar-borrado-tarea/*'))
-@php
+@php    
 $id = Request::route('id'); // Obtiene el ID de la ruta
 $tarea = $tareas->firstWhere('id', $id);
 @endphp
@@ -159,7 +159,7 @@ $tarea = $tareas->firstWhere('id', $id);
         <div class="modal-content shadow-lg">
             <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title">Confirmar Borrado</h5>
-                <a href="{{ route('ver-tareas', ['page'=> request()->query('page')]) }}" class="btn-close btn-close-white" aria-label="Close"></a>
+                <a href="{{ route('tareas.index', ['page'=> request()->query('page')]) }}" class="btn-close btn-close-white" aria-label="Close"></a>
             </div>
             <div class="modal-body">
                 <p class="mb-3">¿Estás seguro de que deseas borrar la siguiente tarea?</p>
@@ -178,8 +178,8 @@ $tarea = $tareas->firstWhere('id', $id);
                 @endif
             </div>
             <div class="modal-footer">
-                <a href="{{ route('ver-tareas', ['page'=> request()->query('page')]) }}" class="btn btn-secondary">Cancelar</a>
-                <form action="{{ route('borrar-tarea', ['id' => $id]) }}" method="POST" class="d-inline">
+                <a href="{{ route('tareas.index', ['page'=> request()->query('page')]) }}" class="btn btn-secondary">Cancelar</a>
+                <form action="{{ route('tareas.destroy', ['id' => $id]) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Sí, borrar</button>
@@ -190,7 +190,7 @@ $tarea = $tareas->firstWhere('id', $id);
 </div>
 @endif
 
-@if (Request::is('ver-tareas/detalle-cliente/*'))
+@if (Request::is('ver-tareas/detalle-cliente/*'))   
 @php
 $id = Request::route('id'); // Obtiene el ID de la ruta
 $cliente = $tareas->firstWhere('cliente_id', $id)->cliente;
@@ -200,7 +200,7 @@ $cliente = $tareas->firstWhere('cliente_id', $id)->cliente;
         <div class="modal-content shadow-lg">
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title">Detalles del Cliente</h5>
-                <a href="{{ route('ver-tareas',['page'=> request()->query('page')]) }}" class="btn-close btn-close-white" aria-label="Close"></a>
+                <a href="{{ route('tareas.index',['page'=> request()->query('page')]) }}" class="btn-close btn-close-white" aria-label="Close"></a>
             </div>
             <div class="modal-body">
                 @if(isset($cliente))
@@ -218,7 +218,7 @@ $cliente = $tareas->firstWhere('cliente_id', $id)->cliente;
                 @endif
             </div>
             <div class="modal-footer">
-                <a href="{{ route('ver-tareas', ['page'=> request()->query('page')])  }}" class="btn btn-secondary">Cerrar</a>
+                <a href="{{ route('tareas.index', ['page'=> request()->query('page')])  }}" class="btn btn-secondary">Cerrar</a>
             </div>
         </div>
     </div>

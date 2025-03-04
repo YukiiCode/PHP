@@ -61,9 +61,11 @@
                             </td>
                             <td class="text-center">
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('editar-tarea',['id' => $tarea->id]) }}" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" title="Editar">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
+                                    @if(Auth::user()->empleado->tipo !== 'operario')
+                                        <a href="{{ route('editar-tarea',['id' => $tarea->id]) }}" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    @endif
                                     <a href="{{ route('confirmar-borrado-tarea', ['id' => $tarea->id,'page'=> request()->query('page')]) }}"
                                         class="btn btn-outline-danger btn-sm"
                                         data-toggle="tooltip"

@@ -5,12 +5,7 @@
     <div class="card shadow-lg border-0 rounded-4">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center rounded-top-4">
             <h3 class="mb-0"><i class="fas fa-home me-2"></i>Panel de Control</h3>
-            <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                @csrf
-                <button type="submit" class="btn btn-light btn-sm rounded-pill">
-                    <i class="fas fa-sign-out-alt me-1"></i>Cerrar sesión
-                </button>
-            </form>
+            
         </div>
         <div class="card-body p-4">
             <div class="row mb-4">

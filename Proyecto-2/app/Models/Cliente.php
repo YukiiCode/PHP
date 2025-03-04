@@ -12,7 +12,7 @@ class Cliente extends Model
 
     public function usuario()
     {
-        return $this->belongsTo('App\Models\Usuario', 'id_usuario');
+        return $this->belongsTo('App\Models\User', 'id_usuario');
     }
 
     public function tareas()

@@ -22,7 +22,7 @@ class Tarea extends Model
 
     public function empleado()
     {
-        return $this->belongsTo(Empleado::class, 'operario_id');
+        return $this->belongsTo('App\Models\Empleado', 'operario_id');
     }
 
 

@@ -6,17 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cuotas extends Model
 {
+ 
     protected $table = 'cuotas';
-    protected $guarded = [];
+    protected $fillable = ['cliente_id', 'empleado_id', 'concepto', 'importe', 'tipo', 'fecha_emision', 'fecha_pago', 'pagado', 'notas', 'estado'];
     public $timestamps = false;
 
-    public function cliente(){
-        return $this->belongsTo('App\Models\Cliente', 'cliente_id');
+    public function cliente()
+    {
+        return $this->belongsTo(Cliente::class, 'cliente_id');
     }
 
-    public function empleado(){
-        return $this->belongsTo('App\Models\Empleado', 'empleado_id');
+    public function empleado()
+    {
+        return $this->belongsTo(Empleado::class, 'empleado_id');
     }
-
+    protected $casts = [
+        'fecha_emision' => 'date',
+        'fecha_pago' => 'date',
+    ];
 }
 

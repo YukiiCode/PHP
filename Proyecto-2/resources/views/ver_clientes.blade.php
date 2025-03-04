@@ -1,17 +1,17 @@
 @extends('plantilla')
 @section('titulo', 'Listado de Clientes')
 @section('contenido')
-<div class="container mt-5">
-    <div class="card shadow-lg">
-        <div class="card-header bg-primary text-white">
-            <h3 class="card-title mb-0"><i class="fas fa-users mr-2"></i> Listado de Clientes</h3>
+<div class="container-fluid p-4">
+    <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white py-3">
+            <h3 class="card-title mb-0 fs-4 fw-bold"><i class="fas fa-users me-2"></i>Gestión de Clientes</h3>
         </div>
-        <div class="card-body">
+        <div class="card-body"> 
             <div class="table-responsive">
-                <table class="table table-hover table-bordered mb-0">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>CIF</th>
+                <table class="table table-striped table-hover align-middle mb-0">
+                    <thead class="table-light align-middle">
+                        <tr class="fs-7 text-uppercase">
+                            <th class="ps-3">CIF</th>
                             <th>Nombre</th>
                             <th>Teléfono</th>
                             <th>Correo</th>
@@ -32,31 +32,46 @@
                             <td>{{ $cliente->moneda }}</td>
                             <td>{{ $cliente->importe_mensual }}</td>
                             <td class="text-center">
-                                <div class="btn-group" role="group">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Acciones cliente">
                                     <a href="{{ route('ver-cliente', ['id' => $cliente->id]) }}" 
-                                       class="btn btn-info btn-sm" 
-                                       data-toggle="tooltip" 
-                                       title="Ver detalles">
-                                        <i class="fas fa-eye"></i>
+                                       class="btn btn-outline-primary"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       title="Detalles completos">
+                                        <i class="fas fa-eye me-1"></i>Ver
                                     </a>
-                                    <a href="@if (request()->query('id') == $cliente->id) {{ route('ver-clientes', ['page'=> request()->query('page')]) }} @else {{ route('ver-clientes', ['id'=>$cliente->id, 'page'=>request()->query('page')]) }} @endif"
-                                       class="btn btn-secondary btn-sm" 
-                                       data-toggle="tooltip" 
-                                       title="@if(request()->query('id') == $cliente->id) Ocultar cuotas @else Ver cuotas @endif">
-                                        <i class="fas @if(request()->query('id') == $cliente->id) fa-chevron-up @else fa-chevron-down @endif"></i>
-                                    </a>
+                                    <button class="btn btn-outline-info"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#cuotas-{{ $cliente->id }}"
+                                        aria-expanded="false"
+                                        aria-controls="cuotas-{{ $cliente->id }}"
+                                        title="{{ request()->query('id') == $cliente->id ? 'Ocultar' : 'Mostrar' }} cuotas"
+                                        aria-label="Gestión de cuotas">
+                                        <i class="fas fa-coins me-1"></i>Cuotas
+                                    </button>
+                                    <form action="{{ route('eliminar-cliente', $cliente->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" 
+                                            class="btn btn-outline-danger"
+                                            onclick="return confirm('¿Confirmar eliminación permanente?')"
+                                            aria-label="Eliminar cliente">
+                                            <i class="fas fa-trash-alt me-1"></i>Baja
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
-                        @if(request()->query('id') == $cliente->id)
-                        <tr class="table-info">
-                            <td colspan="8">
-                                <div class="p-3">
-                                    <h5 class="mb-3"><i class="fas fa-coins mr-2"></i>Cuotas del Cliente</h5>
-                                    <table class="table table-hover table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Concepto</th>
+                        <tr class="collapse" id="cuotas-{{ $cliente->id }}">
+                            <td colspan="8" class="p-0">
+                                <div class="p-3 bg-light">
+                                    <h5 class="mb-3 text-primary fs-5"><i class="fas fa-coins me-2"></i>Historial de Cuotas</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-borderless mb-0">
+                                            <thead class="small bg-soft-primary">
+                                                <tr>
+                                                    <th class="ps-3">Concepto</th>
                                                 <th>Fecha Emisión</th>
                                                 <th>Importe</th>
                                                 <th>Pagado</th>
@@ -66,11 +81,15 @@
                                         </thead>
                                         <tbody>
                                             @forelse ($cliente->cuotas as $cuota)
-                                            <tr class="{{ $cuota->pagado ? 'bg-success text-white' : 'bg-warning' }}">
+                                            <tr class="{{ $cuota->pagado ? 'bg-success bg-opacity-25 text-dark' : 'bg-warning bg-opacity-25' }}">
                                                 <td>{{ $cuota->concepto }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($cuota->fecha_emision)->format('d/m/Y') }}</td>
-                                                <td>{{ $cuota->importe }}</td>
-                                                <td>{{ $cuota->pagado ? 'Sí' : 'No' }}</td>
+                                                <td class="text-nowrap">{{ \Carbon\Carbon::parse($cuota->fecha_emision)->isoFormat('DD MMM YYYY') }}</td>
+                                                <td class="fw-medium">{{ number_format($cuota->importe, 2) }}€</td>
+                                                <td>
+                                                    <span class="badge bg-{{ $cuota->pagado ? 'success' : 'warning' }} rounded-pill">
+                                                        {{ $cuota->pagado ? 'Pagado' : 'Pendiente' }}
+                                                    </span>
+                                                </td>
                                                 <td>{{ $cuota->fecha_pago ? \Carbon\Carbon::parse($cuota->fecha_pago)->format('d/m/Y') : 'N/A' }}</td>
                                                 <td>{{ $cuota->notas }}</td>
                                             </tr>
@@ -84,7 +103,6 @@
                                 </div>
                             </td>
                         </tr>
-                        @endif
                         @empty
                         <tr>
                             <td colspan="8" class="text-center py-4">
@@ -95,9 +113,12 @@
                     </tbody>
                 </table>
             </div>
-            <div class="d-flex justify-content-center mt-4">
-                {{ $clientes->links('vendor.pagination.bootstrap-4') }}
-            </div>
+            <div class="d-flex justify-content-between align-items-center mt-4 px-3">
+                    <span class="text-muted small">Mostrando {{ $clientes->firstItem() }} - {{ $clientes->lastItem() }} de {{ $clientes->total() }} registros</span>
+                    <div class="d-flex">
+                        {{ $clientes->onEachSide(1)->links('vendor.pagination.bootstrap-5') }}
+                    </div>
+                </div>
         </div>
     </div>
 </div>

@@ -30,8 +30,8 @@
                     <input type="text" class="form-control" id="tipo" name="tipo">
                 </div>
                 <div class="mb-3">
-                    <label for="fecha_contratacion" class="form-label">Fecha de Contratación</label>
-                    <input type="date" class="form-control" id="fecha_contratacion" name="fecha_contratacion">
+                    <label for="fecha_alta" class="form-label">Fecha de Alta</label>
+                    <input type="date" class="form-control" id="fecha_alta" name="fecha_alta">
                 </div>
                 <div class="d-grid">
                     <button type="submit" class="btn btn-primary">Guardar Empleado</button>

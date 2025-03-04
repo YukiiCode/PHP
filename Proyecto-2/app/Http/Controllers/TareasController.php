@@ -6,17 +6,29 @@ use App\Models\Cliente;
 use App\Models\Empleado;
 use Illuminate\Http\Request;
 use App\Models\Tarea;
+use Illuminate\Support\Facades\Auth;
 
 class TareasController extends Controller
 {
     public function index()
     {
-        $tareas = Tarea::with(['cliente', 'empleado'])->paginate(7);
+        if (Auth::user()->empleado->tipo === 'operario') {
+            $tareas = Tarea::where('operario_id', Auth::user()->empleado->id)
+                ->with(['cliente', 'empleado'])
+                ->paginate(7);
+        } else {
+            $tareas = Tarea::with(['cliente', 'empleado'])->paginate(7);
+        }
+
         return view('ver_tareas', compact('tareas'));
     }
 
     public function form()
     {
+        if (Auth::user()->empleado->tipo === 'operario') {
+            return redirect()->route('ver-tareas')->with('error', 'No tienes permisos para acceder a esta sección');
+        }
+        
         $clientes = Cliente::all();
         $operarios = Empleado::where('tipo', 'operario')->get();
         return view('nueva_tarea', compact('clientes', 'operarios'));
@@ -24,6 +36,10 @@ class TareasController extends Controller
 
     public function edit($id)
     {
+        if (Auth::user()->empleado->tipo === 'operario') {
+            return redirect()->route('ver-tareas')->with('error', 'No tienes permisos para editar tareas');
+        }
+
         $tarea = Tarea::with(['cliente', 'empleado'])->find($id);
         $operarios = Empleado::where('tipo', 'operario')->get();
         $clientes = Cliente::all();

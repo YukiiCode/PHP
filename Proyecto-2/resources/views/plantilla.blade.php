@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('titulo') - Gestión de Tareas</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Estilos personalizados -->
@@ -31,20 +30,7 @@
             box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .modal {
-            display: flex;
-            /* Esto asegura que la modal esté oculta inicialmente */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            /* Fondo oscuro semi-transparente */
-            justify-content: center;
-            align-items: center;
-            z-index: 999;
-        }
+        
     </style>
 </head>
 
@@ -86,10 +72,13 @@
                         </ul>
                     </li>
 
+
+
+                    @if(Auth::user()->empleado->tipo !== 'operario')
                     <!-- Menú desplegable para Empleados -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownEmpleados" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-users me-1"></i> Empleados
+                            <i class="fas fa-users-cog me-1"></i> Empleados
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownEmpleados">
                             <li>
@@ -98,8 +87,8 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-plus-circle me-2"></i>Nuevo Empleado
+                                <a class="dropdown-item" href="{{ route('nuevo-cliente') }}">
+                                    <i class="fas fa-plus-circle me-2"></i>Nuevo Cliente
                                 </a>
                             </li>
                         </ul>
@@ -110,6 +99,7 @@
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownClientes" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user-tie me-1"></i> Clientes
                         </a>
+                        @endif
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownClientes">
                             <li>
                                 <a class="dropdown-item" href="{{ route('ver-clientes') }}">
@@ -124,15 +114,39 @@
                         </ul>
                     </li>
 
-                    <!-- Opción para Cerrar Sesión -->
-                    <li class="nav-item">
-                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" class="nav-link btn btn-link text-white p-0">
-                                <i class="fas fa-sign-out-alt me-1"></i>Cerrar Sesión
-                            </button>
-                        </form>
+                    @if(Auth::check())
+                    <!-- Menú de usuario -->
+                    <li class="nav-item dropdown ms-auto">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUsuario" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user me-1"></i>{{ Auth::user()->name }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownUsuario">
+                            <li>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item text-danger">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                                    </button>
+                                </form>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('change.password') }}">
+                                    <i class="fas fa-lock me-2"></i>Cambiar Contraseña
+                                </a>
+                            </li>
+                        </ul>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="{{ route('cuotas.index') }}">
+                            <i class="fas fa-euro-sign me-2"></i>
+                            Gestión de Cuotas
+                        </a>
+                    </li>
+                    @endif
+
                 </ul>
             </div>
         </div>
@@ -151,8 +165,9 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    @vite(['resources/js/app.js'])
 </body>
 
 </html>

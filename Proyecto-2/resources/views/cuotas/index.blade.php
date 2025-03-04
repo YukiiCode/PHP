@@ -11,13 +11,22 @@
                     <i class="fas fa-table me-1"></i>
                     Listado de Cuotas
                 </div>
-                <div>
-                    <a href="{{ route('cuotas.create') }}" class="btn btn-primary btn-sm">
-                        <i class="fas fa-plus me-1"></i> Nueva Cuota
-                    </a>
-                    <a href="{{ route('cuotas.batch.create') }}" class="btn btn-success btn-sm">
-                        <i class="fas fa-copy me-1"></i> Generar Mensuales
-                    </a>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-plus me-1"></i> Añadir Cuotas
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('cuotas.create') }}">
+                                <i class="fas fa-user me-1"></i> Cuota Individual
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('cuotas.batch.create') }}">
+                                <i class="fas fa-users me-1"></i> Remesa para Todos los Clientes
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -71,7 +80,7 @@
                                 </span>
                             </td>
                             <td>
-                                <a href="{{ route('cuotas.update', $cuota->id) }}" class="btn btn-sm btn-outline-secondary" title="Editar">
+                                <a href="{{ route('cuotas.edit', $cuota->id) }}" class="btn btn-sm btn-outline-secondary" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <a href="{{ route('cuotas.download', $cuota->id) }}" class="btn btn-sm btn-outline-primary" title="Descargar PDF">

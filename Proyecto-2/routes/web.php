@@ -25,6 +25,7 @@ Route::get('/confirmar-borrado-tarea/{id}', [TareasController::class, 'index'])-
 Route::delete('/borrar-tarea/{id}', [TareasController::class, 'borrarTarea'])->name('tareas.destroy');
 Route::post('/actualizar-tarea/{id}', [TareasController::class, 'update'])->name('tareas.update');
 Route::get('/acceso-cliente', [TareasController::class, 'indexClienteView'])->name('tareas.cliente-access');
+Route::post('/acceso-cliente', [TareasController::class, 'storeClienteTask'])->name('tareas.cliente-store');
 Route::get('/ver-tareas/detalle-cliente/{id}',[TareasController::class, 'index'])->name('tareas.cliente-detail');
 
 // Clientes

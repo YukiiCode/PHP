@@ -60,4 +60,41 @@ class TareasController extends Controller
         $tarea->delete();
         return redirect()->route('tareas.index');
     }
+
+    public function indexClienteView()
+    {
+        return view('acceso_cliente');
+    }
+
+    public function storeClienteTask(Request $request)
+    {
+        $validated = $request->validate([
+            'cif' => 'required',
+            'telefono' => 'required|digits:9',
+            'titulo' => 'required',
+            'descripcion' => 'required'
+        ]);
+
+        // Verify client credentials
+        $cliente = Cliente::where('cif', $validated['cif'])
+                         ->where('telefono', $validated['telefono'])
+                         ->first();
+
+        if (!$cliente) {
+            return redirect()->back()
+                ->withErrors(['credentials' => 'CIF o teléfono no válidos'])
+                ->withInput();
+        }
+
+        // Create task with pending approval status
+        Tarea::create([
+            'cliente_id' => $cliente->id,
+            'estado' => 'A',
+            'fecha_creacion' => now(),
+            'anotaciones' => $validated['descripcion']
+        ]);
+
+        return redirect()->route('tareas.cliente-access')
+            ->with('success', 'Incidencia registrada correctamente. Pendiente de aprobación.');
+    }
 }

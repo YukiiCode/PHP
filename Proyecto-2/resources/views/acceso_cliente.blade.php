@@ -25,14 +25,14 @@
                     </div>
                     @endif
 
-                    <form method="POST" action="">
+                    <form method="POST" action="{{ route('tareas.cliente-store') }}">
                         @csrf
 
                         <!-- CIF del Cliente -->
                         <div class="mb-3">
                             <label for="cif" class="form-label">CIF <span class="text-danger">*</span></label>
                             <input type="text" class="form-control @error('cif') is-invalid @enderror"
-                                id="cif" name="cif" placeholder="Introduce tu CIF">
+                                id="cif" name="cif" value="{{ old('cif') }}" placeholder="Introduce tu CIF">
                             @error('cif')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -42,7 +42,7 @@
                         <div class="mb-3">
                             <label for="telefono" class="form-label">Teléfono <span class="text-danger">*</span></label>
                             <input type="text" class="form-control @error('telefono') is-invalid @enderror"
-                                id="telefono" name="telefono" placeholder="Introduce tu teléfono">
+                                id="telefono" name="telefono" value="{{ old('telefono') }}" placeholder="Introduce tu teléfono">
                             @error('telefono')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -52,7 +52,7 @@
                         <div class="mb-3">
                             <label for="titulo" class="form-label">Título de la Incidencia <span class="text-danger">*</span></label>
                             <input type="text" class="form-control @error('titulo') is-invalid @enderror"
-                                id="titulo" name="titulo" placeholder="Describe brevemente el problema">
+                                id="titulo" name="titulo" value="{{ old('titulo') }}" placeholder="Describe brevemente el problema">
                             @error('titulo')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -63,7 +63,7 @@
                             <label for="descripcion" class="form-label">Descripción <span class="text-danger">*</span></label>
                             <textarea class="form-control @error('descripcion') is-invalid @enderror"
                                 id="descripcion" name="descripcion" rows="5"
-                                placeholder="Proporciona detalles sobre la incidencia"></textarea>
+                                placeholder="Proporciona detalles sobre la incidencia">{{ old('descripcion') }}</textarea>
                             @error('descripcion')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

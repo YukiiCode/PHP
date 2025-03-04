@@ -7,7 +7,6 @@ use App\Models\Cliente;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Auth;
 
 class CuotasController extends Controller
 {
@@ -38,13 +37,21 @@ class CuotasController extends Controller
             'estado' => 'required|in:pendiente,pagada'
         ]);
 
-        Cuotas::create($validated);
+        // Convert estado to pagado boolean value
+        $data = $validated;
+        $data['pagado'] = ($validated['estado'] === 'pagada') ? 1 : 0;
+        $data['importe'] = $validated['monto']; // Map monto to importe
+        unset($data['estado']);
+        unset($data['monto']);
+
+        Cuotas::create($data);
         return redirect()->route('cuotas.index')->with('success', 'Cuota creada');
     }
 
     public function batchCreate()
     {
-        return view('cuotas.batch');
+        $clientes = Cliente::all();
+        return view('cuotas.batch', compact('clientes'));
     }
 
     public function batchStore(Request $request)
@@ -55,10 +62,10 @@ class CuotasController extends Controller
         foreach ($clientes as $cliente) {
             Cuotas::create([
                 'cliente_id' => $cliente->id,
-                'monto' => $request->monto,
+                'importe' => $request->importe,
                 'tipo' => 'mensual',
                 'fecha_emision' => $fecha,
-                'estado' => 'pendiente'
+                'pagado' => 0
             ]);
         }
 
@@ -80,14 +87,32 @@ class CuotasController extends Controller
         }
     }   
 
+    public function edit(Cuotas $cuota)
+    {
+        return view('cuotas.edit', compact('cuota'));
+    }
+
     public function update(Request $request, Cuotas $cuota)
     {
         $validated = $request->validate([
-            'monto' => 'required|numeric',
+            'concepto' => 'nullable|string',
+            'tipo' => 'required|in:individual,mensual',
+            'importe' => 'required|numeric',
+            'fecha_emision' => 'required|date',
+            'fecha_pago' => 'nullable|date',
             'estado' => 'required|in:pendiente,pagada'
         ]);
 
-        $cuota->update($validated);
+        $data = [
+            'concepto' => $validated['concepto'],
+            'tipo' => $validated['tipo'],
+            'importe' => $validated['importe'],
+            'fecha_emision' => $validated['fecha_emision'],
+            'fecha_pago' => $validated['fecha_pago'],
+            'pagado' => ($validated['estado'] === 'pagada') ? 1 : 0
+        ];
+
+        $cuota->update($data);
         return redirect()->route('cuotas.index')->with('success', 'Cuota actualizada');
     }
 
@@ -112,8 +137,8 @@ class CuotasController extends Controller
             $emailContent .= "Cliente: {$cuota->cliente->nombre}\n";
             $emailContent .= "Fecha de Emisión: {$cuota->fecha_emision->format('d/m/Y')}\n";
             $emailContent .= "Tipo: {$cuota->tipo}\n";
-            $emailContent .= "Monto: €" . number_format($cuota->monto, 2) . "\n";
-            $emailContent .= "Estado: {$cuota->estado}\n";
+            $emailContent .= "Monto: €" . number_format($cuota->importe, 2) . "\n"; // Use importe instead of monto
+            $emailContent .= "Estado: " . ($cuota->pagado ? 'Pagada' : 'Pendiente') . "\n"; // Convert pagado to estado text
 
             // Send email
             Mail::raw($emailContent, function ($message) use ($cuota, $pdfContent) {

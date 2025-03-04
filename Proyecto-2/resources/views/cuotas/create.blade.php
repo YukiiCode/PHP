@@ -38,15 +38,31 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="importe" class="form-label">Importe (€)</label>
-                    <input type="number" class="form-control" id="importe" name="importe"
-                           step="0.01" min="0" value="{{ old('importe') }}" required>
+                    <label for="monto" class="form-label">Importe (€)</label>
+                    <input type="number" class="form-control" id="monto" name="monto"
+                           step="0.01" min="0" value="{{ old('monto') }}" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="tipo" class="form-label">Tipo de Cuota</label>
+                    <select class="form-select" id="tipo" name="tipo" required>
+                        <option value="mensual" {{ old('tipo') == 'mensual' ? 'selected' : '' }}>Mensual</option>
+                        <option value="extraordinaria" {{ old('tipo') == 'extraordinaria' ? 'selected' : '' }}>Extraordinaria</option>
+                    </select>
                 </div>
 
                 <div class="mb-3">
                     <label for="fecha_emision" class="form-label">Fecha de Emisión</label>
                     <input type="date" class="form-control" id="fecha_emision" name="fecha_emision"
                            value="{{ old('fecha_emision', now()->format('Y-m-d')) }}" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="estado" class="form-label">Estado</label>
+                    <select class="form-select" id="estado" name="estado" required>
+                        <option value="pendiente" {{ old('estado') == 'pendiente' ? 'selected' : '' }}>Pendiente</option>
+                        <option value="pagada" {{ old('estado') == 'pagada' ? 'selected' : '' }}>Pagada</option>
+                    </select>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Crear Cuota</button>

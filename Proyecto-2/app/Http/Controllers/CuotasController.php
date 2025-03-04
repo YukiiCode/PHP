@@ -67,9 +67,18 @@ class CuotasController extends Controller
 
     public function download(Cuotas $cuota)
     {
-        $pdf = PDF::loadView('cuotas.invoice', compact('cuota'));
-        return $pdf->download('factura-' . $cuota->id . '.pdf');
-    }
+        try {
+            $pdf = PDF::loadView('cuotas.invoice', compact('cuota'));
+            return $pdf->download('factura-' . $cuota->id . '.pdf', [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="factura-' . $cuota->id . '.pdf"'
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error generating PDF: ' . $e->getMessage());
+            return redirect()->route('cuotas.index')
+                ->with('error', 'Error al generar el PDF: ' . $e->getMessage());
+        }
+    }   
 
     public function update(Request $request, Cuotas $cuota)
     {
@@ -91,10 +100,23 @@ class CuotasController extends Controller
     public function email(Cuotas $cuota)
     {
         try {
+            // Generate PDF
             $pdf = PDF::loadView('cuotas.invoice', compact('cuota'));
+            if (!$pdf) {
+                throw new \Exception('Error generating PDF');
+            }
             $pdfContent = $pdf->output();
-            
-            Mail::send('emails', ['cuota' => $cuota], function ($message) use ($cuota, $pdfContent) {
+
+            // Create email content
+            $emailContent = "Factura #{$cuota->id}\n\n";
+            $emailContent .= "Cliente: {$cuota->cliente->nombre}\n";
+            $emailContent .= "Fecha de Emisión: {$cuota->fecha_emision->format('d/m/Y')}\n";
+            $emailContent .= "Tipo: {$cuota->tipo}\n";
+            $emailContent .= "Monto: €" . number_format($cuota->monto, 2) . "\n";
+            $emailContent .= "Estado: {$cuota->estado}\n";
+
+            // Send email
+            Mail::raw($emailContent, function ($message) use ($cuota, $pdfContent) {
                 $message->to('fernandonieves180@gmail.com')
                     ->subject('Factura #' . $cuota->id)
                     ->attachData($pdfContent, 'factura-' . $cuota->id . '.pdf');
@@ -103,8 +125,9 @@ class CuotasController extends Controller
             return redirect()->route('cuotas.index')
                 ->with('success', 'Factura enviada por correo electrónico');
         } catch (\Exception $e) {
+            \Log::error('Error sending invoice email: ' . $e->getMessage());
             return redirect()->route('cuotas.index')
-                ->with('error', 'Error al enviar el correo electrónico');
+                ->with('error', 'Error al enviar el correo electrónico: ' . $e->getMessage());
         }
     }
 }

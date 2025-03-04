@@ -71,7 +71,7 @@
                                 </span>
                             </td>
                             <td>
-                                <a href="{{ route('cuotas.edit', $cuota->id) }}" class="btn btn-sm btn-outline-secondary" title="Editar">
+                                <a href="{{ route('cuotas.update', $cuota->id) }}" class="btn btn-sm btn-outline-secondary" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <a href="{{ route('cuotas.download', $cuota->id) }}" class="btn btn-sm btn-outline-primary" title="Descargar PDF">

@@ -30,7 +30,7 @@
             </tr>
             <tr>
                 <td>{{ ucfirst($cuota->tipo) }}</td>
-                <td>{{ number_format($cuota->monto, 2) }}€</td>
+                <td>{{ number_format($cuota->importe, 2) }}€</td>
                 <td>{{ ucfirst($cuota->estado) }}</td>
             </tr>
         </table>

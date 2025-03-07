@@ -9,7 +9,7 @@ use function PHPUnit\Framework\isArray;
 class Tarea extends Model
 {
     protected $table = 'tareas';
-    protected $fillable = ['id', 'estado', 'operario_id', 'fecha_creacion', 'fecha_finalizacion', 'anotaciones', 'cliente_id'];
+    protected $fillable = ['cliente_id', 'operario_id', 'estado', 'fecha_creacion', 'fecha_finalizacion', 'anotaciones', 'fichero_resumen', 'fotos_trabajo'];
     public $timestamps = false;
     protected $casts = [
         'fotos_trabajo' => 'array', // Convierte el JSON a un array automáticamente

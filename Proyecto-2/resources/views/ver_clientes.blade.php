@@ -33,12 +33,12 @@
                             <td>{{ $cliente->importe_mensual }}</td>
                             <td class="text-center">
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Acciones cliente">
-                                    <a href="{{ route('ver-cliente', ['id' => $cliente->id]) }}" 
+                                    <a href="{{ route('clientes.edit', ['id' => $cliente->id]) }}" 
                                        class="btn btn-outline-primary"
                                        data-bs-toggle="tooltip"
                                        data-bs-placement="top"
-                                       title="Detalles completos">
-                                        <i class="fas fa-eye me-1"></i>Ver
+                                       title="Editar cliente">
+                                        <i class="fas fa-edit me-1"></i>Editar
                                     </a>
                                     <button class="btn btn-outline-info"
                                         type="button"

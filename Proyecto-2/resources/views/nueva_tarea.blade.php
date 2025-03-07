@@ -5,7 +5,7 @@
 @section('contenido')
 <div class="container">
     <h1 class="my-4">Crear Nueva Tarea</h1>
-    <form action="{{ route('nueva-tarea') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('tareas.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <!-- Mostrar mensaje de error general -->

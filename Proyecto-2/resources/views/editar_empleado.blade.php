@@ -14,32 +14,50 @@
                 
                 <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre</label>
-                    <input type="text" class="form-control" id="nombre" name="nombre" value="{{ old('nombre', $empleado->nombre) }}">
+                    <input type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" name="nombre" value="{{ old('nombre', $empleado->nombre) }}">
+            @error('nombre')
+            <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
                 </div>
                 
                 <div class="mb-3">
                     <label for="dni" class="form-label">DNI</label>
-                    <input type="text" class="form-control" id="dni" name="dni" value="{{ old('dni', $empleado->dni) }}">
+                    <input type="text" class="form-control @error('dni') is-invalid @enderror" id="dni" name="dni" value="{{ old('dni', $empleado->dni) }}">
+            @error('dni')
+            <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
                 </div>
                 
                 <div class="mb-3">
                     <label for="correo" class="form-label">Correo</label>
-                    <input type="email" class="form-control" id="correo" name="correo" value="{{ old('correo', $empleado->correo) }}">
+                    <input type="email" class="form-control @error('correo') is-invalid @enderror" id="correo" name="correo" value="{{ old('correo', $empleado->correo) }}">
+            @error('correo')
+            <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
                 </div>
                 
                 <div class="mb-3">
                     <label for="telefono" class="form-label">Teléfono</label>
-                    <input type="tel" class="form-control" id="telefono" name="telefono" value="{{ old('telefono', $empleado->telefono) }}">
+                    <input type="tel" class="form-control @error('telefono') is-invalid @enderror" id="telefono" name="telefono" value="{{ old('telefono', $empleado->telefono) }}">
+            @error('telefono')
+            <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
                 </div>
                 
                 <div class="mb-3">
                     <label for="direccion" class="form-label">Dirección</label>
-                    <input type="text" class="form-control" id="direccion" name="direccion" value="{{ old('direccion', $empleado->direccion) }}">
+                    <input type="text" class="form-control @error('direccion') is-invalid @enderror" id="direccion" name="direccion" value="{{ old('direccion', $empleado->direccion) }}">
+            @error('direccion')
+            <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
                 </div>
                 
                 <div class="mb-3">
                     <label for="tipo" class="form-label">Tipo</label>
-                    <select class="form-select" id="tipo" name="tipo">
+                    <select class="form-select @error('tipo') is-invalid @enderror" id="tipo" name="tipo">
+            @error('tipo')
+            <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
                         <option value="operario" {{ $empleado->tipo == 'operario' ? 'selected' : '' }}>Operario</option>
                         <option value="administrador" {{ $empleado->tipo == 'administrador' ? 'selected' : '' }}>Administrador</option>
                     </select>

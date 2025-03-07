@@ -5,10 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('titulo') - Gestión de Tareas</title>
-    <!-- Bootstrap CSS -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- cdn bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Bundle JS (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Estilos personalizados -->
     <style>
         body {
@@ -46,24 +49,24 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ route('home') }}">
+                        <a class="nav-link {{ Request::routeIs('home') ? 'active' : '' }}" aria-current="page" href="{{ route('home') }}">
                             <i class="fas fa-home me-1"></i> Home
                         </a>
                     </li>
 
                     <!-- Menú desplegable para Tareas -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTareas" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle {{ Request::routeIs('tareas.*') ? 'active' : '' }}" href="#" id="navbarDropdownTareas" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-tasks me-1"></i> Tareas
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownTareas">
                             <li>
-                                <a class="dropdown-item" href="{{ route('tareas.create') }}">
+                                <a class="dropdown-item {{ Request::routeIs('tareas.create') ? 'active' : '' }}" href="{{ route('tareas.create') }}">
                                     <i class="fas fa-plus-circle me-2"></i>Nueva Tarea
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ route('tareas.index') }}">
+                                <a class="dropdown-item {{ Request::routeIs('tareas.index') ? 'active' : '' }}" href="{{ route('tareas.index') }}">
                                     <i class="fas fa-list me-2"></i>Ver Tareas
                                 </a>
                             </li>
@@ -78,12 +81,12 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownEmpleados">
                             <li>
-                                <a class="dropdown-item" href="{{ route('empleados.index') }}">
+                                <a class="dropdown-item {{ Request::routeIs('empleados.index') ? 'active' : '' }}" href="{{ route('empleados.index') }}">
                                     <i class="fas fa-list me-2"></i>Ver Empleados
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ route('empleados.create') }}">
+                                <a class="dropdown-item {{ Request::routeIs('empleados.create') ? 'active' : '' }}" href="{{ route('empleados.create') }}">
                                     <i class="fas fa-plus-circle me-2"></i>Nuevo Empleado
                                 </a>
                             </li>
@@ -92,21 +95,27 @@
 
                     <!-- Menú desplegable para Clientes -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownClientes" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle {{ Request::routeIs('clientes.*') ? 'active' : '' }}" href="#" id="navbarDropdownClientes" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user-tie me-1"></i> Clientes
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownClientes">
                             <li>
-                                <a class="dropdown-item" href="{{ route('clientes.index') }}">
+                                <a class="dropdown-item {{ Request::routeIs('clientes.index') ? 'active' : '' }}" href="{{ route('clientes.index') }}">
                                     <i class="fas fa-list me-2"></i>Ver Clientes
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ route('clientes.create') }}">
+                                <a class="dropdown-item {{ Request::routeIs('clientes.create') ? 'active' : '' }}" href="{{ route('clientes.create') }}">
                                     <i class="fas fa-plus-circle me-2"></i>Nuevo Cliente
                                 </a>
                             </li>
                         </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::routeIs('cuotas.*') ? 'active' : '' }}" href="{{ route('cuotas.index') }}">
+                            <i class="fas fa-euro-sign me-2"></i>Gestión de Cuotas
+                        </a>
                     </li>
                     @endif
 
@@ -129,16 +138,11 @@
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ route('change.password') }}">
+                                <a class="dropdown-item {{ Request::routeIs('change.password') ? 'active' : '' }}" href="{{ route('change.password') }}">
                                     <i class="fas fa-lock me-2"></i>Cambiar Contraseña
                                 </a>
                             </li>
                         </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('cuotas.index') }}">
-                            <i class="fas fa-euro-sign me-2"></i>Gestión de Cuotas
-                        </a>
                     </li>
                     @endif
 
@@ -162,7 +166,6 @@
 
     <!-- Bootstrap Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    @vite(['resources/js/app.js'])
 </body>
 
 </html>

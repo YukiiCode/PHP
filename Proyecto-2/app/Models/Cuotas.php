@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Services\CurrencyConverter;
 
 class Cuotas extends Model
 {
  
     protected $table = 'cuotas';
-    protected $fillable = ['cliente_id', 'empleado_id', 'concepto', 'importe', 'tipo', 'fecha_emision', 'fecha_pago', 'pagado', 'notas', 'estado'];
+    protected $fillable = ['cliente_id', 'empleado_id', 'concepto', 'importe', 'importe_euros', 'tipo', 'fecha_emision', 'fecha_pago', 'pagado', 'notas', 'estado'];
     public $timestamps = false;
 
     public function cliente()
@@ -24,5 +25,22 @@ class Cuotas extends Model
         'fecha_emision' => 'date',
         'fecha_pago' => 'date',
     ];
+    
+    /**
+     * Get the amount converted to euros
+     *
+     * @return float
+     */
+    public function getImporteEnEuros()
+    {
+        // If client doesn't have a currency set or it's already in euros, return the original amount
+        if (!$this->cliente || !$this->cliente->moneda || $this->cliente->moneda === 'EUR') {
+            return $this->importe;
+        }
+        
+        // Use the singleton currency converter to convert to euros
+        $converter = CurrencyConverter::getInstance();
+        return $converter->convertToEuro($this->importe, $this->cliente->moneda);
+    }
 }
 

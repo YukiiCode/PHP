@@ -48,15 +48,15 @@
                     
                     <div class="col-md-4">
                         <label class="form-label">Fecha Pago</label>
-                        <input type="date" class="form-control" name="fecha_pago" 
+                        <input type="text" class="form-control" name="fecha_pago" 
                             value="{{ old('fecha_pago', optional($cuota->fecha_pago)?->format('Y-m-d')) }}">
                     </div>
                     
                     <div class="col-md-4">
                         <label class="form-label">Estado</label>
-                        <select class="form-select" id="estado" name="estado" required>
-                            <option value="pendiente" {{ old('estado', $cuota->estado) == 'pendiente' ? 'selected' : '' }}>Pendiente</option>
-                            <option value="pagado" {{ old('estado', $cuota->estado) == 'pagado' ? 'selected' : '' }}>Pagado</option>
+                        <select class="form-select" id="estado" name="pagado" required>
+                            <option value="0" {{ old('estado', $cuota->estado) == '0' ? 'selected' : '' }}>Pendiente</option>
+                            <option value="1" {{ old('estado', $cuota->estado) == '1' ? 'selected' : '' }}>Pagado</option>
                         </select>
                     </div>
                     

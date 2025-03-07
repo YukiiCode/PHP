@@ -61,17 +61,19 @@
                             </td>
                             <td class="text-center">
                                 <div class="btn-group" role="group">
-                                    @if(Auth::user()->empleado->tipo !== 'operario')
-                                        <a href="{{ route('tareas.edit',['id' => $tarea->id]) }}" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" title="Editar">
+                                   
+                                        <a href="{{ route('tareas.edit',['tarea' => $tarea]) }}" class="btn btn-outline-primary btn-sm" data-toggle="tooltip" title="Editar">
                                             <i class="fas fa-edit"></i>
                                         </a>
+                                    @if(Auth::user()->empleado->tipo !== 'operario')
+                                    <form action="{{ route('tareas.destroy', $tarea->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-outline-danger btn-sm" data-toggle="tooltip" title="Eliminar">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
                                     @endif
-                                    <a href="{{ route('tareas.confirm-delete', ['id' => $tarea->id,'page'=> request()->query('page')]) }}"
-                                        class="btn btn-outline-danger btn-sm"
-                                        data-toggle="tooltip"
-                                        title="Eliminar">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
                                     <a href="@if (request()->query('id') == $tarea->id) {{ route('tareas.index', ['page'=> request()->query('page')]) }} @else {{ route('tareas.index', ['id'=>$tarea->id, 'page'=>request()->query('page')]) }} @endif"
                                         class="btn btn-outline-secondary btn-sm"
                                         data-toggle="tooltip"

@@ -21,7 +21,7 @@
                 
                 <div class="mb-3">
                     <label for="cliente_id" class="form-label">Cliente</label>
-                    <select class="form-select" id="cliente_id" name="cliente_id" required>
+                    <select class="form-select" id="cliente_id" name="cliente_id">
                         <option value="">Seleccione un cliente</option>
                         @foreach($clientes as $cliente)
                             <option value="{{ $cliente->id }}" {{ old('cliente_id') == $cliente->id ? 'selected' : '' }}>
@@ -34,18 +34,18 @@
                 <div class="mb-3">
                     <label for="concepto" class="form-label">Concepto</label>
                     <input type="text" class="form-control" id="concepto" name="concepto" 
-                           value="{{ old('concepto') }}" required maxlength="100">
+                           value="{{ old('concepto') }}" maxlength="100">
                 </div>
 
                 <div class="mb-3">
                     <label for="monto" class="form-label">Importe (€)</label>
-                    <input type="number" class="form-control" id="monto" name="monto"
-                           step="0.01" min="0" value="{{ old('monto') }}" required>
+                    <input type="number" class="form-control" id="importe" name="importe"
+                           step="0.01" min="0" value="{{ old('importe') }}">
                 </div>
                 
                 <div class="mb-3">
                     <label for="tipo" class="form-label">Tipo de Cuota</label>
-                    <select class="form-select" id="tipo" name="tipo" required>
+                    <select class="form-select" id="tipo" name="tipo">
                         <option value="mensual" {{ old('tipo') == 'mensual' ? 'selected' : '' }}>Mensual</option>
                         <option value="extraordinaria" {{ old('tipo') == 'extraordinaria' ? 'selected' : '' }}>Extraordinaria</option>
                     </select>
@@ -54,12 +54,12 @@
                 <div class="mb-3">
                     <label for="fecha_emision" class="form-label">Fecha de Emisión</label>
                     <input type="date" class="form-control" id="fecha_emision" name="fecha_emision"
-                           value="{{ old('fecha_emision', now()->format('Y-m-d')) }}" required>
+                           value="{{ old('fecha_emision', now()->format('Y-m-d')) }}">
                 </div>
                 
                 <div class="mb-3">
                     <label for="estado" class="form-label">Estado</label>
-                    <select class="form-select" id="estado" name="estado" required>
+                    <select class="form-select" id="estado" name="estado">
                         <option value="pendiente" {{ old('estado') == 'pendiente' ? 'selected' : '' }}>Pendiente</option>
                         <option value="pagada" {{ old('estado') == 'pagada' ? 'selected' : '' }}>Pagada</option>
                     </select>

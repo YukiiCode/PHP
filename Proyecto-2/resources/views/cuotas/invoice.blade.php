@@ -30,8 +30,13 @@
             </tr>
             <tr>
                 <td>{{ ucfirst($cuota->tipo) }}</td>
-                <td>{{ number_format($cuota->importe, 2) }}€</td>
-                <td>{{ ucfirst($cuota->estado) }}</td>
+                <td>
+                    {{ number_format($cuota->importe, 2) }} {{ $cuota->cliente->moneda ?? 'EUR' }}
+                    @if($cuota->cliente && $cuota->cliente->moneda && $cuota->cliente->moneda !== 'EUR')
+                        <br><small>({{ number_format($cuota->getImporteEnEuros(), 2) }}€)</small>
+                    @endif
+                </td>
+                <td>{{ $cuota->pagado ? 'Pagada' : 'Pendiente' }}</td>
             </tr>
         </table>
     </div>

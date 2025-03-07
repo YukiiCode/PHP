@@ -16,7 +16,8 @@
     </div>
     @endif
 
-    <form action="{{ route('actualizar-tarea', ['id' => $tarea->id]) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('tareas.update', $tarea) }}" method="POST" enctype="multipart/form-data">
+    @method('PUT')
         @csrf
         @method('PUT') <!-- Indica que esta es una solicitud de actualización -->
 
@@ -39,9 +40,9 @@
         <!-- Fecha de Realización -->
         <div class="mb-3">
             <label for="fecha_realizacion" class="form-label">Fecha de Realización <span class="text-danger">*</span></label>
-            <input type="date" class="form-control @error('fecha_realizacion') is-invalid @enderror"
+            <input type="text" class="form-control @error('fecha_realizacion') is-invalid @enderror"
                 name="fecha_realizacion" id="fecha_realizacion"
-                value="{{ old('fecha_realizacion', \Carbon\Carbon::parse($tarea->fecha_realizacion)->format('Y-m-d')) }}" required>
+                value="{{ old('fecha_realizacion', \Carbon\Carbon::parse($tarea->fecha_finalizacion)->format('Y-m-d')) }}" required>
             @error('fecha_realizacion')
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -53,7 +54,7 @@
             <select class="form-select" name="cliente_id" id="cliente">
                 <option value="">Selecciona un cliente</option>
                 @foreach ($clientes as $cliente)
-                <option value="{{ $cliente->id }} @if($cliente->id == $tarea->cliente->id) echo selected @endif">{{ $cliente->nombre }}</option>
+                <option value="{{ $cliente->id }}" @if($cliente->id == old('cliente_id', $tarea->cliente_id)) selected @endif>{{ $cliente->nombre }}</option>
                 @endforeach
             </select>
         </div>
@@ -141,7 +142,7 @@
             <button type="submit" class="btn btn-primary" data-bs-toggle="tooltip" title="Guardar cambios">
                 <i class="fas fa-save me-1"></i> Actualizar Tarea
             </button>
-            <a href="{{ route('ver-tareas') }}" class="btn btn-secondary" data-bs-toggle="tooltip" title="Cancelar edición">
+            <a href="{{ route('tareas.index') }}" class="btn btn-secondary" data-bs-toggle="tooltip" title="Cancelar edición">
                 <i class="fas fa-times me-1"></i> Cancelar
             </a>
         </div>

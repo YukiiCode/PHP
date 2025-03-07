@@ -59,9 +59,14 @@ class ClientesController extends Controller
     {
         $validated = $request->validate([
             'nombre' => 'required',
-            'direccion' => 'required',
             'telefono' => 'required|digits:9',
-            'email' => 'required|email'
+            'cif' => 'required',
+            'correo' => 'required|email',
+            'cuenta_corriente' => 'required',
+            'pais' => 'required',
+            'moneda' => 'required',
+            'importe_mensual' => 'required',
+
         ]);
 
         Cliente::findOrFail($id)->update($validated);

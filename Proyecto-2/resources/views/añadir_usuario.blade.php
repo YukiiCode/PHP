@@ -39,7 +39,7 @@
             </form>
             @elseif (request('tipo') == 'cliente')
             <h3 class="text-center mb-4">Formulario para Cliente</h3>
-            <form action="{{ route('guardar-cliente') }}" method="POST">
+            <form action="{{ route('clientes.store') }}" method="POST">
                 @csrf
                 <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre</label>

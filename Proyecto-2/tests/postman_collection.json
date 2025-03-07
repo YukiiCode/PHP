@@ -1,0 +1,261 @@
+{
+  "info": {
+    "_postman_id": "a1234567-89ab-cdef-ghij-klmnopqrstuv",
+    "name": "Tareas API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Task",
+      "item": [
+        {
+          "name": "Success - Valid Data",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"F\",\n  \"operario_id\": 1,\n  \"cliente_id\": 1,\n  \"fecha_creacion\": \"2024-01-01\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/tareas",
+              "host": ["{{base_url}}"],
+              "path": ["tareas"]
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test(\"Status code is 201\", () => pm.response.to.have.status(201))",
+                "pm.test(\"Response structure\", () => {",
+                "  const jsonData = pm.response.json();",
+                "  pm.expect(jsonData).to.have.property('success', true);",
+                "  pm.expect(jsonData.data).to.have.keys(['id', 'estado', 'operario_id', 'cliente_id', 'fecha_creacion', 'updated_at', 'created_at']);",
+                "  pm.environment.set('created_task_id', jsonData.data.id);",
+                "});"
+              ],
+              "type": "text/javascript"
+            }
+          }]
+        },
+        {
+          "name": "Error - Invalid Data",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"X\",\n  \"operario_id\": 999,\n  \"cliente_id\": 999\n}"
+            },
+            "url": {"raw": "{{base_url}}/tareas", "host": ["{{base_url}}"], "path": ["tareas"]}
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test(\"Status code 422\", () => pm.response.to.have.status(422))",
+                "pm.test(\"Validation errors\", () => {",
+                "  const jsonData = pm.response.json();",
+                "  pm.expect(jsonData.errors).to.have.property('estado');",
+                "  pm.expect(jsonData.errors).to.have.property('operario_id');",
+                "  pm.expect(jsonData.errors).to.have.property('cliente_id');",
+                "  pm.expect(jsonData.errors).to.have.property('fecha_creacion');",
+                "});"
+              ]
+            }
+          }]
+        }
+      ]
+    },
+    {
+      "name": "Get Tasks",
+      "item": [
+        {
+          "name": "Get All Tasks",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{base_url}}/tareas", "host": ["{{base_url}}"], "path": ["tareas"]}
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test(\"Status code 200\", () => pm.response.to.have.status(200))",
+                "pm.test(\"Non-empty data array\", () => {",
+                "  const jsonData = pm.response.json();",
+                "  pm.expect(jsonData.data).to.be.an('array').that.is.not.empty;",
+                "});"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "Get Single Task",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/tareas/{{created_task_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["tareas", "{{created_task_id}}"]
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test(\"Status code 200\", () => pm.response.to.have.status(200))",
+                "pm.test(\"Matching task ID\", () => {",
+                "  const jsonData = pm.response.json();",
+                "  pm.expect(jsonData.data.id).to.eql(pm.environment.get('created_task_id'));",
+                "});"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "Error - Non-existent Task",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{base_url}}/tareas/9999", "host": ["{{base_url}}"], "path": ["tareas", "9999"]}
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test(\"Status code 404\", () => pm.response.to.have.status(404))",
+                "pm.test(\"Error message\", () => {",
+                "  pm.expect(pm.response.json().message).to.include('not found');",
+                "});"
+              ]
+            }
+          }]
+        }
+      ]
+    },
+    {
+      "name": "Update Task",
+      "item": [
+        {
+          "name": "Partial Update Success",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"T\",\n  \"fecha_finalizacion\": \"2024-01-02\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/tareas/{{created_task_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["tareas", "{{created_task_id}}"]
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test(\"Status code 200\", () => pm.response.to.have.status(200))",
+                "pm.test(\"Updated fields\", () => {",
+                "  const jsonData = pm.response.json();",
+                "  pm.expect(jsonData.data.estado).to.eql('T');",
+                "  pm.expect(jsonData.data).to.have.property('fecha_finalizacion');",
+                "});"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "Error - Invalid Update",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"X\",\n  \"operario_id\": 999\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/tareas/{{created_task_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["tareas", "{{created_task_id}}"]
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test(\"Status code 422\", () => pm.response.to.have.status(422))",
+                "pm.test(\"Validation errors\", () => {",
+                "  const jsonData = pm.response.json();",
+                "  pm.expect(jsonData.errors).to.have.property('estado');",
+                "  pm.expect(jsonData.errors).to.have.property('operario_id');",
+                "});"
+              ]
+            }
+          }]
+        }
+      ]
+    },
+    {
+      "name": "Delete Task",
+      "item": [
+        {
+          "name": "Delete Success",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/tareas/{{created_task_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["tareas", "{{created_task_id}}"]
+            }
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test(\"Status code 200\", () => pm.response.to.have.status(200))",
+                "pm.test(\"Confirmation message\", () => {",
+                "  pm.expect(pm.response.json().message).to.include('deleted');",
+                "});"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "Error - Delete Non-existent Task",
+          "request": {
+            "method": "DELETE",
+            "url": {"raw": "{{base_url}}/tareas/9999", "host": ["{{base_url}}"], "path": ["tareas", "9999"]}
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test(\"Status code 404\", () => pm.response.to.have.status(404))",
+                "pm.test(\"Error message\", () => {",
+                "  pm.expect(pm.response.json().message).to.include('not found');",
+                "});"
+              ]
+            }
+          }]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "exec": ["// Pre-request script if needed"],
+        "type": "text/javascript"
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000/api",
+      "type": "string"
+    }
+  ]
+}

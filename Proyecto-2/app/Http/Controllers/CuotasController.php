@@ -7,17 +7,110 @@ use App\Models\Cliente;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
+use PayPalCheckoutSdk\Core\PayPalEnvironment;
+use PayPalCheckoutSdk\Core\PayPalHttpClient;
+use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
+use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
 
 class CuotasController extends Controller
 {
+    private $paypalClient;
+
     public function __construct()
     {
-        $this->middleware('can:admin');
+        $this->paypalClient = new \PayPalCheckoutSdk\Core\PayPalHttpClient(
+            new \PayPalCheckoutSdk\Core\ProductionEnvironment(
+                env('PAYPAL_CLIENT_ID'),
+                env('PAYPAL_CLIENT_SECRET')
+            )
+        );
     }
 
-    public function index()
+    public function handlePayPalPayment(Cuotas $cuota)
     {
-        $cuotas = Cuotas::with(['cliente', 'empleado'])->paginate(10);
+        try {
+            $request = new OrdersCreateRequest();
+            $request->body = [
+                'intent' => 'CAPTURE',
+                'purchase_units' => [[
+                    'reference_id' => $cuota->id,
+                    'amount' => [
+                        'currency_code' => $cuota->cliente->moneda ?? 'EUR',
+                        'value' => $cuota->importe
+                    ],
+                    'description' => $cuota->concepto
+                ]]
+            ];
+
+            $response = $this->paypalClient->execute($request);
+            $approvalUrl = collect($response->result->links)
+                ->where('rel', 'approve')
+                ->first()->href;
+
+            return redirect()->away($approvalUrl);
+
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Error al procesar el pago: ' . $e->getMessage());
+        }
+    }
+
+    public function paypalSuccess(Request $request)
+    {
+        $orderId = $request->input('token');
+        try {
+            $cuotaId = $this->capturePayment($orderId);
+            $cuota = Cuotas::findOrFail($cuotaId);
+            $cuota->update(['pagado' => true, 'fecha_pago' => now()]);
+
+            return redirect()->route('cuotas.index')
+                ->with('success', 'Pago realizado exitosamente');
+
+        } catch (\Exception $e) {
+            return redirect()->route('cuotas.index')
+                ->with('error', 'Error al confirmar el pago: ' . $e->getMessage());
+        }
+    }
+
+    private function capturePayment($orderId)
+    {
+        $request = new OrdersCaptureRequest($orderId);
+        $response = $this->paypalClient->execute($request);
+
+        if ($response->statusCode !== 201) {
+            throw new \Exception('Payment capture failed');
+        }
+
+        return $response->result->purchase_units[0]->reference_id;
+    }
+
+    public function paypalCancel()
+    {
+        return redirect()->route('cuotas.index')
+            ->with('warning', 'Pago cancelado por el usuario');
+    }
+
+    public function index(Request $request)
+    {
+        $query = Cuotas::with(['cliente', 'empleado']);
+
+        if ($request->filled('search')) {
+            $query->whereHas('cliente', function($q) use ($request) {
+                $q->where('nombre', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        if ($request->filled('estado')) {
+            $query->where('pagado', $request->estado === 'pagado' ? 1 : 0);
+        }
+
+        if ($request->filled('mes')) {
+            $query->whereMonth('fecha_emision', '=', date('m', strtotime($request->mes)))
+                  ->whereYear('fecha_emision', '=', date('Y', strtotime($request->mes)));
+        }
+
+        $cuotas = $query->paginate(10);
+
         return view('cuotas.index', compact('cuotas'));
     }
 
@@ -31,18 +124,17 @@ class CuotasController extends Controller
     {
         $validated = $request->validate([
             'cliente_id' => 'required|exists:clientes,id',
-            'monto' => 'required|numeric',
+            'concepto' => 'required|string',
+            'importe' => 'required|numeric',
             'tipo' => 'required|in:mensual,extraordinaria',
             'fecha_emision' => 'required|date',
             'estado' => 'required|in:pendiente,pagada'
         ]);
 
-        // Convert estado to pagado boolean value
         $data = $validated;
         $data['pagado'] = ($validated['estado'] === 'pagada') ? 1 : 0;
-        $data['importe'] = $validated['monto']; // Map monto to importe
+        $data['importe'] = $validated['importe']; 
         unset($data['estado']);
-        unset($data['monto']);
 
         Cuotas::create($data);
         return redirect()->route('cuotas.index')->with('success', 'Cuota creada');
@@ -62,10 +154,11 @@ class CuotasController extends Controller
         foreach ($clientes as $cliente) {
             Cuotas::create([
                 'cliente_id' => $cliente->id,
+                'concepto' => $request->concepto,
                 'importe' => $request->importe,
-                'tipo' => 'mensual',
+                'tipo' => $request->tipo,
                 'fecha_emision' => $fecha,
-                'pagado' => 0
+                'pagado' => $request->pagado
             ]);
         }
 
@@ -81,7 +174,6 @@ class CuotasController extends Controller
                 'Content-Disposition' => 'attachment; filename="factura-' . $cuota->id . '.pdf"'
             ]);
         } catch (\Exception $e) {
-            \Log::error('Error generating PDF: ' . $e->getMessage());
             return redirect()->route('cuotas.index')
                 ->with('error', 'Error al generar el PDF: ' . $e->getMessage());
         }
@@ -95,12 +187,12 @@ class CuotasController extends Controller
     public function update(Request $request, Cuotas $cuota)
     {
         $validated = $request->validate([
-            'concepto' => 'nullable|string',
+            'concepto' => 'required|string',
             'tipo' => 'required|in:individual,mensual',
             'importe' => 'required|numeric',
             'fecha_emision' => 'required|date',
             'fecha_pago' => 'nullable|date',
-            'estado' => 'required|in:pendiente,pagada'
+            'pagado' => 'required|boolean'
         ]);
 
         $data = [
@@ -109,7 +201,7 @@ class CuotasController extends Controller
             'importe' => $validated['importe'],
             'fecha_emision' => $validated['fecha_emision'],
             'fecha_pago' => $validated['fecha_pago'],
-            'pagado' => ($validated['estado'] === 'pagada') ? 1 : 0
+            'pagado' => ($validated['pagado'] )
         ];
 
         $cuota->update($data);
@@ -137,7 +229,14 @@ class CuotasController extends Controller
             $emailContent .= "Cliente: {$cuota->cliente->nombre}\n";
             $emailContent .= "Fecha de Emisión: {$cuota->fecha_emision->format('d/m/Y')}\n";
             $emailContent .= "Tipo: {$cuota->tipo}\n";
-            $emailContent .= "Monto: €" . number_format($cuota->importe, 2) . "\n"; // Use importe instead of monto
+            $moneda = $cuota->cliente->moneda ?? 'EUR';
+            $emailContent .= "Monto: " . number_format($cuota->importe, 2) . " {$moneda}\n";
+            
+            // Add euro conversion if needed
+            if ($cuota->cliente && $cuota->cliente->moneda && $cuota->cliente->moneda !== 'EUR') {
+                $emailContent .= "Monto en Euros: " . number_format($cuota->getImporteEnEuros(), 2) . "€\n";
+            }
+            
             $emailContent .= "Estado: " . ($cuota->pagado ? 'Pagada' : 'Pendiente') . "\n"; // Convert pagado to estado text
 
             // Send email

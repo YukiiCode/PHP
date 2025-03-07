@@ -21,7 +21,7 @@ Route::get('/nueva-tarea', [TareasController::class, 'create'])->name('tareas.cr
 Route::post('/nueva-tarea', [TareasController::class, 'store'])->name('tareas.store');
 Route::get('/editar-tarea/{tarea}', [TareasController::class, 'edit'])->name('tareas.edit');
 Route::put('/actualizar-tarea/{tarea}', [TareasController::class, 'update'])->name('tareas.update');
-Route::delete('/borrar-tarea/{id}', [TareasController::class, 'destroy'])->name('tareas.destroy');
+Route::delete('/borrar-tarea/{tarea}', [TareasController::class, 'destroy'])->name('tareas.destroy');
 
 // Empleados CRUD
 Route::resource('empleados', EmpleadosController::class)->except(['create']);

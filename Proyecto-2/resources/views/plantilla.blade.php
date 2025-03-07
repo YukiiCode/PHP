@@ -11,7 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Bundle JS (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Estilos personalizados -->
     <style>
         body {
@@ -56,10 +56,10 @@
 
                     <!-- Menú desplegable para Tareas -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {{ Request::routeIs('tareas.*') ? 'active' : '' }}" href="#" id="navbarDropdownTareas" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle {{ Request::routeIs('tareas.*') ? 'active' : '' }}" href="#" id="navbarDropdownTareas" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-tasks me-1"></i> Tareas
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownTareas">
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownTareas">
                             <li>
                                 <a class="dropdown-item {{ Request::routeIs('tareas.create') ? 'active' : '' }}" href="{{ route('tareas.create') }}">
                                     <i class="fas fa-plus-circle me-2"></i>Nueva Tarea
@@ -76,10 +76,10 @@
                     @if(Auth::user()->empleado->tipo !== 'operario')
                     <!-- Menú desplegable para Empleados -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownEmpleados" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownEmpleados" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-users-cog me-1"></i> Empleados
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownEmpleados">
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownEmpleados">
                             <li>
                                 <a class="dropdown-item {{ Request::routeIs('empleados.index') ? 'active' : '' }}" href="{{ route('empleados.index') }}">
                                     <i class="fas fa-list me-2"></i>Ver Empleados
@@ -164,8 +164,24 @@
         </div>
     </footer>
 
-    <!-- Bootstrap Dependencies -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize all dropdowns
+        var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+        var dropdownList = dropdownElementList.map(function(element) {
+            return new bootstrap.Dropdown(element, {
+                hover: false,
+                autoClose: true
+            });
+        });
+
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+    </script>
 </body>
 
 </html>

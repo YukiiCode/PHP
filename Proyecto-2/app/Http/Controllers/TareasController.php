@@ -27,6 +27,17 @@ class TareasController extends Controller
         return view('editar_tarea', compact('tarea', 'clientes', 'operarios'));
     }
 
+    public function destroy($id)
+    {
+        $tarea = Tarea::findOrFail($id);
+        $tarea->delete();
+
+        return redirect()->route('tareas.index')
+            ->with('success', 'Tarea eliminada correctamente');
+    }
+
+
+
     public function store(Request $request)
     {
         $validated = $request->validate([

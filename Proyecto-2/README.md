@@ -26,7 +26,7 @@ Sistema de gestión de tareas desarrollado con Laravel para administrar proyecto
 
 1. Clonar repositorio:
 ```bash
-git clone https://github.com/tu-usuario/gestion-tareas.git
+git clone https://github.com/YukiiCode/gestion-tareas.git
 cd gestion-tareas
 ```
 
@@ -73,4 +73,4 @@ Este proyecto está bajo la licencia [MIT](https://opensource.org/licenses/MIT).
 
 ---
 
-Desarrollado con ❤️ por [Fernando](https://github.com/tu-usuario)
+Desarrollado con ❤️ por [Yuki](https://github.com/YukiiCode)

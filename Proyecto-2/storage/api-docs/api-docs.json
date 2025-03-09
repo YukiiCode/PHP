@@ -1,0 +1,292 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Task Management API",
+        "description": "API for managing tasks",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/tareas": {
+            "get": {
+                "summary": "List all tasks",
+                "operationId": "802f09d138dc10ad75bd6b77ef123f0b",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Tarea"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create new task",
+                "operationId": "7b25afab68f5e724c98dc510c5df2217",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TareaStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Task created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TareaResource"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/tareas/{id}": {
+            "get": {
+                "summary": "Get specific task",
+                "operationId": "33adaac00a557cf973e21ad403ca8ba5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Task ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TareaResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Task not found"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update existing task",
+                "operationId": "6f8e8a5de70a166605458b48edf1feed",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Task ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TareaUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TareaResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Task not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a task",
+                "operationId": "5c3c6638cc4411907241c6ff71f2b971",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Task ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Task deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Task not found"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "TareaStoreRequest": {
+                "required": [
+                    "estado",
+                    "operario_id",
+                    "cliente_id",
+                    "fecha_creacion"
+                ],
+                "properties": {
+                    "estado": {
+                        "type": "string",
+                        "enum": [
+                            "F",
+                            "T",
+                            "C",
+                            "A",
+                            "E"
+                        ]
+                    },
+                    "operario_id": {
+                        "type": "integer"
+                    },
+                    "cliente_id": {
+                        "type": "integer"
+                    },
+                    "fecha_creacion": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "TareaUpdateRequest": {
+                "properties": {
+                    "estado": {
+                        "type": "string",
+                        "enum": [
+                            "F",
+                            "T",
+                            "C",
+                            "A",
+                            "E"
+                        ]
+                    },
+                    "operario_id": {
+                        "type": "integer"
+                    },
+                    "cliente_id": {
+                        "type": "integer"
+                    },
+                    "fecha_finalizacion": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "TareaResource": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Tarea"
+                    },
+                    {
+                        "properties": {
+                            "success": {
+                                "type": "boolean"
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            },
+            "Tarea": {
+                "title": "Task",
+                "description": "Task model",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "estado": {
+                        "type": "string",
+                        "enum": [
+                            "F",
+                            "T",
+                            "C",
+                            "A",
+                            "E"
+                        ]
+                    },
+                    "operario_id": {
+                        "type": "integer"
+                    },
+                    "cliente_id": {
+                        "type": "integer"
+                    },
+                    "fecha_creacion": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "fecha_finalizacion": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            }
+        }
+    }
+}

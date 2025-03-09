@@ -3,9 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use OpenApi\Annotations as OA;
 
-use function PHPUnit\Framework\isArray;
-
+/**
+ * @OA\Schema(
+ *     schema="Tarea",
+ *     title="Task",
+ *     description="Task model",
+ *     @OA\Property(property="id", type="integer"),
+ *     @OA\Property(property="estado", type="string", enum={"F","T","C","A","E"}),
+ *     @OA\Property(property="operario_id", type="integer"),
+ *     @OA\Property(property="cliente_id", type="integer"),
+ *     @OA\Property(property="fecha_creacion", type="string", format="date-time"),
+ *     @OA\Property(property="fecha_finalizacion", type="string", format="date-time", nullable=true)
+ * )
+ */
 class Tarea extends Model
 {
     protected $table = 'tareas';

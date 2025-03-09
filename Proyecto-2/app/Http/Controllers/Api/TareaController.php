@@ -6,9 +6,64 @@ use App\Models\Tarea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use OpenApi\Annotations as OA;
+
+/**
+ * @OA\OpenApi(
+ *     @OA\Info(
+ *         version="1.0.0",
+ *         title="Task Management API",
+ *         description="API for managing tasks"
+ *     ),
+ *     @OA\Components(
+ *         @OA\Schema(
+ *             schema="TareaStoreRequest",
+ *             type="object",
+ *             required={"estado","operario_id","cliente_id","fecha_creacion"},
+ *             @OA\Property(property="estado", type="string", enum={"F","T","C","A","E"}),
+ *             @OA\Property(property="operario_id", type="integer"),
+ *             @OA\Property(property="cliente_id", type="integer"),
+ *             @OA\Property(property="fecha_creacion", type="string", format="date-time")
+ *         ),
+ *         @OA\Schema(
+ *             schema="TareaUpdateRequest",
+ *             type="object",
+ *             @OA\Property(property="estado", type="string", enum={"F","T","C","A","E"}),
+ *             @OA\Property(property="operario_id", type="integer"),
+ *             @OA\Property(property="cliente_id", type="integer"),
+ *             @OA\Property(property="fecha_finalizacion", type="string", format="date-time", nullable=true)
+ *         ),
+ *         @OA\Schema(
+ *             schema="TareaResource",
+ *             allOf={
+ *                 @OA\Schema(ref="#/components/schemas/Tarea"),
+ *                 @OA\Schema(
+ *                     type="object",
+ *                     @OA\Property(property="success", type="boolean")
+ *                 )
+ *             }
+ *         )
+ *     )
+ * )
+ */
 
 class TareaController extends Controller
 {
+    /**
+     * @OA\Get(
+     *     path="/api/tareas",
+     *     summary="List all tasks",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean"),
+     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/Tarea"))
+     *         )
+     *     )
+     * )
+     */
     public function __construct()
     {
         // Skip authentication middleware for API endpoints
@@ -24,6 +79,22 @@ class TareaController extends Controller
         }
     }
 
+        /**
+     * @OA\Post(
+     *     path="/api/tareas",
+     *     summary="Create new task",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/TareaStoreRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Task created successfully",
+     *         @OA\JsonContent(ref="#/components/schemas/TareaResource")
+     *     ),
+     *     @OA\Response(response=422, description="Validation error")
+     * )
+     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -48,6 +119,25 @@ class TareaController extends Controller
         }
     }
 
+        /**
+     * @OA\Get(
+     *     path="/api/tareas/{id}",
+     *     summary="Get specific task",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Task ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/TareaResource")
+     *     ),
+     *     @OA\Response(response=404, description="Task not found")
+     * )
+     */
     public function show($id)
     {
         try {
@@ -58,6 +148,30 @@ class TareaController extends Controller
         }
     }
 
+        /**
+     * @OA\Put(
+     *     path="/api/tareas/{id}",
+     *     summary="Update existing task",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Task ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/TareaUpdateRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Task updated successfully",
+     *         @OA\JsonContent(ref="#/components/schemas/TareaResource")
+     *     ),
+     *     @OA\Response(response=404, description="Task not found"),
+     *     @OA\Response(response=422, description="Validation error")
+     * )
+     */
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -85,6 +199,29 @@ class TareaController extends Controller
         }
     }
 
+        /**
+     * @OA\Delete(
+     *     path="/api/tareas/{id}",
+     *     summary="Delete a task",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="Task ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Task deleted successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="success", type="boolean"),
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(response=404, description="Task not found")
+     * )
+     */
     public function destroy($id)
     {
         try {
@@ -96,3 +233,5 @@ class TareaController extends Controller
         }
     }
 }
+
+

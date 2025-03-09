@@ -73,4 +73,4 @@ Este proyecto está bajo la licencia [MIT](https://opensource.org/licenses/MIT).
 
 ---
 
-Desarrollado con ❤️ por [Yuki](https://github.com/YukiiCode)
+Desarrollado por [Yuki](https://github.com/YukiiCode)

@@ -17,12 +17,7 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'rol',
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that are mass assignable.

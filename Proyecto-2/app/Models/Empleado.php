@@ -15,7 +15,7 @@ class Empleado extends Model
     ];
 
     protected $table = 'empleados';
-    protected $fillable = ['id','nombre','dni','direccion','telefono','correo','fecha_alta','tipo','user_id'];
+    protected $guarded = [];
     public $timestamps = false;
 
     public function usuario()

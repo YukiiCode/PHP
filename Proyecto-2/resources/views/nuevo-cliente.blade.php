@@ -1,102 +1,100 @@
 @extends('plantilla')
+
 @section('titulo', 'Nuevo Cliente')
+
 @section('contenido')
-<div class="container">
-    <h1 class="my-4">Crear Nuevo Cliente</h1>
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0"><i class="fas fa-user-plus me-2"></i>Nuevo Cliente</h3>
+        </div>
 
-    @if ($errors->any())
-    <div class="alert alert-danger">
-        <strong>Por favor, corrige los siguientes errores:</strong>
-        <ul>
-            @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
+        <div class="card-body">
+            <form action="{{ route('clientes.store') }}" method="POST">
+                @csrf
+
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre: <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control @error('nombre') is-invalid @enderror"
+                        id="nombre" name="nombre" value="{{ old('nombre') }}" required>
+                    @error('nombre')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="telefono" class="form-label">Teléfono: <span class="text-danger">*</span></label>
+                    <input type="tel" class="form-control @error('telefono') is-invalid @enderror"
+                        id="telefono" name="telefono" value="{{ old('telefono') }}" required>
+                    @error('telefono')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="correo" class="form-label">Email: <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control @error('correo') is-invalid @enderror"
+                        id="correo" name="correo" value="{{ old('correo') }}" required>
+                    @error('correo')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="cif" class="form-label">CIF: <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control @error('cif') is-invalid @enderror"
+                        id="cif" name="cif" value="{{ old('cif') }}" required>
+                    @error('cif')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="cuenta_corriente" class="form-label">Cuenta Corriente: <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control @error('cuenta_corriente') is-invalid @enderror"
+                        id="cuenta_corriente" name="cuenta_corriente" value="{{ old('cuenta_corriente') }}" required>
+                    @error('cuenta_corriente')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="pais" class="form-label">País: <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control @error('pais') is-invalid @enderror"
+                        id="pais" name="pais" value="{{ old('pais') }}" required>
+                    @error('pais')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="moneda" class="form-label">Moneda: <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control @error('moneda') is-invalid @enderror"
+                        id="moneda" name="moneda" value="{{ old('moneda') }}" required>
+                    @error('moneda')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="importe_mensual" class="form-label">Importe Mensual: <span class="text-danger">*</span></label>
+                    <input type="number" step="0.01" class="form-control @error('importe_mensual') is-invalid @enderror"
+                        id="importe_mensual" name="importe_mensual" value="{{ old('importe_mensual') }}" required>
+                    @error('importe_mensual')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Guardar Cliente
+                    </button>
+                    <a href="{{ route('clientes.index') }}" class="btn btn-secondary">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
-    @endif
-
-    <form action="{{ route('clientes.store') }}" method="POST">
-        @csrf
-
-        <div class="mb-3">
-            <label for="cif" class="form-label">CIF <span class="text-danger">*</span></label>
-            <input type="text" class="form-control @error('cif') is-invalid @enderror" 
-                   name="cif" id="cif" value="{{ old('cif') }}" required>
-            @error('cif')
-            <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
-            <input type="text" class="form-control @error('nombre') is-invalid @enderror" 
-                   name="nombre" id="nombre" value="{{ old('nombre') }}" required>
-            @error('nombre')
-            <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="telefono" class="form-label">Teléfono</label>
-            <input type="text" class="form-control @error('telefono') is-invalid @enderror" 
-                   name="telefono" id="telefono" value="{{ old('telefono') }}">
-            @error('telefono')
-            <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="correo" class="form-label">Correo Electrónico</label>
-            <input type="email" class="form-control @error('correo') is-invalid @enderror" 
-                   name="correo" id="correo" value="{{ old('correo') }}">
-            @error('correo')
-            <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="cuenta_corriente" class="form-label">Cuenta Corriente</label>
-            <input type="text" class="form-control @error('cuenta_corriente') is-invalid @enderror" 
-                   name="cuenta_corriente" id="cuenta_corriente" value="{{ old('cuenta_corriente') }}">
-            @error('cuenta_corriente')
-            <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="pais" class="form-label">País</label>
-            <input type="text" class="form-control @error('pais') is-invalid @enderror" 
-                   name="pais" id="pais" value="{{ old('pais') }}">
-            @error('pais')
-            <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="moneda" class="form-label">Moneda</label>
-            <select class="form-select @error('moneda') is-invalid @enderror" name="moneda" id="moneda">
-                <option value="">Seleccionar moneda</option>
-                <option value="EUR" {{ old('moneda') == 'EUR' ? 'selected' : '' }}>Euro (EUR)</option>
-                <option value="USD" {{ old('moneda') == 'USD' ? 'selected' : '' }}>Dólar (USD)</option>
-                <option value="GBP" {{ old('moneda') == 'GBP' ? 'selected' : '' }}>Libra (GBP)</option>
-            </select>
-            @error('moneda')
-            <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-3">
-            <label for="importe_mensual" class="form-label">Importe Mensual</label>
-            <input type="number" step="0.01" min="0" max="9999999.99" 
-                   class="form-control @error('importe_mensual') is-invalid @enderror" 
-                   name="importe_mensual" id="importe_mensual" value="{{ old('importe_mensual') }}">
-            @error('importe_mensual')
-            <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <button type="submit" class="btn btn-primary">Guardar Cliente</button>
-        <a href="{{ route('clientes.index') }}" class="btn btn-secondary">Cancelar</a>
-    </form>
 </div>
 @endsection

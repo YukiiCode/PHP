@@ -9,19 +9,20 @@
                 <div class="card-body">
                     <!-- Mostrar mensaje de éxito o error -->
                     @if(session('success'))
-                    <div class="alert alert-primary">
+                    <div class="alert alert-success">
                         {{ session('success') }}
                     </div>
                     @endif
-
-                    @if ($errors->any())
+                    
+                    @if($errors->has('credentials'))
                     <div class="alert alert-danger">
-                        <strong>Por favor, corrige los siguientes errores:</strong>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
+                        {{ $errors->first('credentials') }}
+                    </div>
+                    @endif
+                    
+                    @if($errors->has('database'))
+                    <div class="alert alert-danger">
+                        {{ $errors->first('database') }}
                     </div>
                     @endif
 
@@ -30,7 +31,7 @@
 
                         <!-- CIF del Cliente -->
                         <div class="mb-3">
-                            <label for="cif" class="form-label">CIF <span class="text-danger">*</span></label>
+                            <label for="cif" class="form-label">CIF <span class="text-danger"></span></label>
                             <input type="text" class="form-control @error('cif') is-invalid @enderror"
                                 id="cif" name="cif" value="{{ old('cif') }}" placeholder="Introduce tu CIF">
                             @error('cif')
@@ -40,20 +41,10 @@
 
                         <!-- Teléfono del Cliente -->
                         <div class="mb-3">
-                            <label for="telefono" class="form-label">Teléfono <span class="text-danger">*</span></label>
+                            <label for="telefono" class="form-label">Teléfono <span class="text-danger"></span></label>
                             <input type="text" class="form-control @error('telefono') is-invalid @enderror"
                                 id="telefono" name="telefono" value="{{ old('telefono') }}" placeholder="Introduce tu teléfono">
                             @error('telefono')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <!-- Título de la Incidencia -->
-                        <div class="mb-3">
-                            <label for="titulo" class="form-label">Título de la Incidencia <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control @error('titulo') is-invalid @enderror"
-                                id="titulo" name="titulo" value="{{ old('titulo') }}" placeholder="Describe brevemente el problema">
-                            @error('titulo')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>

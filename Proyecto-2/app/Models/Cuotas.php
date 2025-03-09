@@ -9,7 +9,7 @@ class Cuotas extends Model
 {
  
     protected $table = 'cuotas';
-    protected $fillable = ['cliente_id', 'empleado_id', 'concepto', 'importe', 'importe_euros', 'tipo', 'fecha_emision', 'fecha_pago', 'pagado', 'notas', 'estado'];
+    protected $guarded = [];
     public $timestamps = false;
 
     public function cliente()

@@ -23,7 +23,7 @@ class ClientesController extends Controller
     // Método para mostrar el formulario de creación
     public function create()
     {
-        return view('nuevo_cliente');
+        return view('nuevo-cliente');
     }
 
     // Método para guardar un nuevo cliente
@@ -31,9 +31,13 @@ class ClientesController extends Controller
     {
         $validated = $request->validate([
             'nombre' => 'required',
-            'direccion' => 'required',
             'telefono' => 'required|digits:9',
-            'email' => 'required|email'
+            'correo' => 'required|email',
+            'cif' => 'required',
+            'cuenta_corriente' => 'required',
+            'pais' => 'required',
+            'moneda' => 'required',
+            'importe_mensual' => 'required|numeric'
         ]);
 
         Cliente::create($validated);

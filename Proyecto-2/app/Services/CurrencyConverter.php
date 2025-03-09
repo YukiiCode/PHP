@@ -11,11 +11,11 @@ class CurrencyConverter
     private $apiUrl = 'https://api.exchangerate-api.com/v4/latest/EUR';
     private $rates = [];
     private $lastFetched = null;
-    private $cacheDuration = 3600; // Cache duration in seconds (1 hour)
+    private $cacheDuration = 3600; // Duración de la caché en segundos (1 hora)
 
     private function __construct()
     {   
-        // You would typically load this from an environment variable
+        // Normalmente cargarías esto desde una variable de entorno
         $this->apiKey = config('services.currency.api_key', null);
         $this->fetchRates();
     }
@@ -30,7 +30,7 @@ class CurrencyConverter
 
     private function fetchRates()
     {
-        // If we have rates and they're not expired, use the cached version
+        // Si tenemos tasas y no han expirado, usar la versión en caché
         if (!empty($this->rates) && $this->lastFetched && (time() - $this->lastFetched < $this->cacheDuration)) {
             return;
         }
@@ -38,12 +38,12 @@ class CurrencyConverter
         try {
             $response = file_get_contents($this->apiUrl);
             if ($response === false) {
-                throw new Exception('Failed to fetch currency rates');
+                throw new Exception('Error al obtener tasas de cambio');
             }
 
             $data = json_decode($response, true);
             if (json_last_error() !== JSON_ERROR_NONE || !isset($data['rates'])) {
-                throw new Exception('Invalid response from currency API');
+                throw new Exception('Respuesta inválida de la API de divisas');
             }
 
             $this->rates = $data['rates'];
@@ -62,48 +62,48 @@ class CurrencyConverter
 
     public function convertToEuro($amount, $fromCurrency)
     {
-        // Ensure we have the latest rates
+        // Asegurar que tenemos las tasas más recientes
         $this->fetchRates();
 
-        // If the currency is already EUR, return the amount
+        // Si la moneda ya es EUR, devolver el monto
         if ($fromCurrency === 'EUR') {
             return $amount;
         }
 
-        // If we don't have a rate for this currency, return the original amount
+        // Si no tenemos una tasa para esta moneda, devolver el monto original
         if (!isset($this->rates[$fromCurrency])) {
             return $amount;
         }
 
-        // Convert from the currency to EUR
-        // Since our base is EUR, we divide by the rate
+        // Convertir de la moneda a EUR
+        // Como nuestra base es EUR, dividimos por la tasa
         return $amount / $this->rates[$fromCurrency];
     }
 
     public function convertFromEuro($amount, $toCurrency)
     {
-        // Ensure we have the latest rates
+        // Asegurar que tenemos las tasas más recientes
         $this->fetchRates();
 
-        // If the currency is already EUR, return the amount
+        // Si la moneda ya es EUR, devolver el monto
         if ($toCurrency === 'EUR') {
             return $amount;
         }
 
-        // If we don't have a rate for this currency, return the original amount
+        // Si no tenemos una tasa para esta moneda, devolver el monto original
         if (!isset($this->rates[$toCurrency])) {
             return $amount;
         }
 
-        // Convert from EUR to the target currency
+        // Convertir de EUR a la moneda objetivo
         return $amount * $this->rates[$toCurrency];
     }
 
-    // Prevent cloning of the instance
+    // Prevenir la clonación de la instancia
     private function __clone() {}
 
-    // Prevent unserializing of the instance
+    // Prevenir la deserialización de la instancia
     public function __wakeup() {
-        throw new Exception("Cannot unserialize singleton");
+        throw new Exception("No se puede deserializar el singleton");
     }
 }

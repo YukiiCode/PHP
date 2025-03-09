@@ -124,7 +124,7 @@
                                                     <img src="{{ $archivoUrl }}" class="img-thumbnail mb-2" style="max-height: 150px;">
                                                     <a href="{{ $archivoUrl }}" download class="btn btn-outline-primary btn-sm btn-block">
                                                         <i class="fas fa-download mr-1"></i>Descargar imagen
-                                                    </a>
+                                                    </a>    
                                                     @endif
                                                 </div>
                                             </div>

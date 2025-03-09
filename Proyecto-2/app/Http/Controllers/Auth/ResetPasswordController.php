@@ -26,4 +26,16 @@ class ResetPasswordController extends Controller
      * @var string
      */
     protected $redirectTo = '/home';
+    
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        // Override the auth middleware from the parent Controller
+        // to allow non-authenticated users to access password reset
+        $this->middleware('guest');
+    }
 }

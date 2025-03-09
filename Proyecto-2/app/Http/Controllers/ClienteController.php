@@ -25,11 +25,23 @@ class ClienteController extends Controller
             'cif' => 'required|string|max:10|unique:clientes',
             'nombre' => 'required|string|max:100',
             'telefono' => 'required|string|max:15|regex:/^[+]?[0-9]+$/',
-            'correo' => 'nullable|email:rfc,dns|max:100',
-            'cuenta_corriente' => 'string|max:24',
-            'pais' => 'string|max:100',
-            'moneda' => 'string',
+            'correo' => 'required|email:rfc,dns|max:100',
+            'cuenta_corriente' => 'required|string|max:24',
+            'pais' => 'required|string|max:100',
+            'moneda' => 'required|string',
             'importe_mensual' => 'required|numeric|between:0,9999999.99',
+        ], [
+            'cif.required' => 'El campo CIF es obligatorio',
+            'nombre.required' => 'El campo Nombre es obligatorio',
+            'telefono.required' => 'El campo Teléfono es obligatorio',
+            'telefono.regex' => 'Formato de teléfono inválido',
+            'correo.required' => 'El campo Email es obligatorio',
+            'correo.email' => 'El formato del email no es válido',
+            'cuenta_corriente.required' => 'El campo Cuenta Corriente es obligatorio',
+            'pais.required' => 'El campo País es obligatorio',
+            'moneda.required' => 'El campo Moneda es obligatorio',
+            'importe_mensual.required' => 'El campo Importe Mensual es obligatorio',
+            'importe_mensual.numeric' => 'El Importe Mensual debe ser un valor numérico',
         ]);
 
         Cliente::create($validated);

@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Cliente extends Model
 {
     protected $table = 'clientes';
-    protected $fillable = ['id', 'cif', 'nombre', 'telefono', 'correo', 'cuenta_corriente', 'pais', 'moneda', 'importe_mensual'];
+    protected $guarded = [];
     public $timestamps = false;
 
     public function usuario()
     {
-        // Relationship commented out as there's no id_usuario field in the clientes table
-        // according to the database schema
+        // Relación comentada ya que no existe el campo id_usuario en la tabla clientes
+        // según el esquema de la base de datos
         // return $this->belongsTo('App\Models\User', 'id_usuario');
         return null;
     }

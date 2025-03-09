@@ -77,13 +77,6 @@ class EmpleadosController extends Controller
         return redirect()->route('empleados.index')->with('success', 'Empleado actualizado correctamente');
     }
 
-    public function borrarEmpleado($id)
-    {
-        $empleado = Empleado::findOrFail($id);
-        $empleado->delete();
-        return redirect()->route('empleados.index')->with('success', 'Empleado eliminado');
-    }
-
     public function destroy($id)
     {
         $empleado = Empleado::findOrFail($id);

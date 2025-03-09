@@ -56,8 +56,7 @@ http://localhost
 
 ## 📸 Capturas
 
-![Listado de tareas](![image](https://github.com/user-attachments/assets/bb77a808-93af-4d8b-b6bf-e68df8a66cf4)
-)
+![Listado de tareas](![image](https://github.com/user-attachments/assets/bb77a808-93af-4d8b-b6bf-e68df8a66cf4))
 *Captura del listado principal de tareas*
 
 ## 🤝 Contribución

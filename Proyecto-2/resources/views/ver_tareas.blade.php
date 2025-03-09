@@ -190,7 +190,7 @@
 </div>
 
 
-@if (Request::is('ver-tareas/detalle-cliente/*'))   
+@if (Request::is('tareas/detalle-cliente/*'))   
 @php
 $id = Request::route('id'); // Obtiene el ID de la ruta
 $cliente = $tareas->firstWhere('cliente_id', $id)->cliente;

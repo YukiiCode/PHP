@@ -116,13 +116,6 @@ class TareasController extends Controller
         return redirect()->route('tareas.index')->with('success', 'Tarea actualizada correctamente.');
     }
 
-    public function borrarTarea($id)
-    {
-        $tarea = Tarea::find($id);
-        $tarea->delete();
-        return redirect()->route('tareas.index');
-    }
-
     public function create()
     {
         if (!Auth::user()->can('admin')) {
@@ -131,17 +124,6 @@ class TareasController extends Controller
 
         $clientes = Cliente::all();
         $operarios = Empleado::where('tipo', 'operario')->get();
-        return view('nueva_tarea', compact('clientes', 'operarios'));
-    }
-
-    public function form()
-    {
-        if (!Auth::user()->can('admin')) {
-            return redirect()->route('tareas.index')->with('error', 'No tienes permisos para crear tareas');
-        }
-
-        $clientes = Cliente::all();
-        $operarios = Empleado::all();
         return view('nueva_tarea', compact('clientes', 'operarios'));
     }
 

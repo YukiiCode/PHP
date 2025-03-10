@@ -1,7 +1,7 @@
 # 🚀 Gestión de Tareas con Laravel
 
 [![Licencia MIT](https://img.shields.io/badge/Licencia-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
-[![Laravel](https://img.shields.io/badge/Laravel-10.x-orange.svg)](https://laravel.com)
+[![Laravel](https://img.shields.io/badge/Laravel-11.x-orange.svg)](https://laravel.com)
 [![PHP](https://img.shields.io/badge/PHP-8.1+-blue.svg)](https://php.net)
 
 Sistema de gestión de tareas desarrollado con Laravel para administrar proyectos y actividades.
@@ -56,7 +56,7 @@ http://localhost
 
 ## 📸 Capturas
 
-![Listado de tareas](/screenshots/tareas.png)
+![image](https://github.com/user-attachments/assets/7f742698-44a0-49b7-bfa6-5ddd5aa4bbb9)
 *Captura del listado principal de tareas*
 
 ## 🤝 Contribución
@@ -73,4 +73,4 @@ Este proyecto está bajo la licencia [MIT](https://opensource.org/licenses/MIT).
 
 ---
 
-Desarrollado con ❤️ por [Yuki](https://github.com/YukiiCode)
+Desarrollado por [Yuki](https://github.com/YukiiCode)

@@ -72,7 +72,7 @@ Route::prefix('cuotas')->group(function () {
 });
 
 // Rutas de PayPal
-Route::prefix('paypal')->group(function () {
+Route::prefix('paypal')->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class])->group(function () {
     Route::post('/payment/{cuota}', [CuotasController::class, 'handlePayPalPayment'])->name('paypal.payment');
     Route::get('/success', [CuotasController::class, 'paypalSuccess'])->name('paypal.success');
     Route::get('/cancel', [CuotasController::class, 'paypalCancel'])->name('paypal.cancel');

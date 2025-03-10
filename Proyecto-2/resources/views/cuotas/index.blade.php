@@ -3,7 +3,7 @@
 @section('contenido')
 <div class="container-fluid px-4">
     <h1 class="mt-4">Gestión de Cuotas</h1>
-    
+
     <div class="card mb-4">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
@@ -77,13 +77,13 @@
                             <td>
                                 {{ $cuota->cliente->moneda ?? 'EUR' }}
                                 @if($cuota->cliente && $cuota->cliente->moneda && $cuota->cliente->moneda !== 'EUR')
-                                    <button type="button" class="btn btn-sm btn-outline-info convert-btn" 
-                                        data-bs-toggle="tooltip" 
-                                        data-bs-placement="top" 
-                                        title="{{ number_format($cuota->getImporteEnEuros(), 2) }}€"
-                                        data-bs-title="{{ number_format($cuota->getImporteEnEuros(), 2) }}€">
-                                        <i class="fas fa-euro-sign"></i>
-                                    </button>
+                                <button type="button" class="btn btn-sm btn-outline-info convert-btn"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="{{ number_format($cuota->getImporteEnEuros(), 2) }}€"
+                                    data-bs-title="{{ number_format($cuota->getImporteEnEuros(), 2) }}€">
+                                    <i class="fas fa-euro-sign"></i>
+                                </button>
                                 @endif
                             </td>
                             <td>{{ $cuota->fecha_emision->format('d/m/Y') }}</td>
@@ -106,7 +106,7 @@
                                     </button>
                                 </form>
                                 @if(!$cuota->pagado)
-                                <button class="btn btn-sm btn-outline-success paypal-button" 
+                                <button class="btn btn-sm btn-outline-success paypal-button"
                                     title="Pagar con PayPal"
                                     data-cuota-id="{{ $cuota->id }}"
                                     data-amount="{{ $cuota->importe }}"
@@ -114,7 +114,7 @@
                                     <i class="fab fa-paypal"></i>
                                 </button>
                                 @endif
-                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" 
+                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
                                     data-bs-target="#deleteModal{{ $cuota->id }}">
                                     <i class="fas fa-trash"></i>
                                 </button>
@@ -155,51 +155,80 @@
     document.addEventListener('DOMContentLoaded', function() {
         // PayPal Payment Handling
         document.querySelectorAll('.paypal-button').forEach(button => {
-            button.addEventListener('click', async (e) => {
+            button.addEventListener('click', (e) => {
                 e.preventDefault();
                 const cuotaId = button.dataset.cuotaId;
+
+                // Show loading indicator
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                button.disabled = true;
+
+                // Create a form to submit the request
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{{ url("/paypal/payment") }}/' + cuotaId;
+                form.style.display = 'none'; // Hide the form but keep it in the DOM
+
+                // Add CSRF token
+                const csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = '_token';
+                const metaToken = document.querySelector('meta[name="csrf-token"]');
+                if (metaToken) {
+                    csrfToken.value = metaToken.content;
+                    console.log('CSRF token found:', csrfToken.value);
+                } else {
+                    console.error('CSRF token meta tag not found');
+                    // Fallback to a hardcoded token from the blade template
+                    csrfToken.value = '{{ csrf_token() }}';
+                }
+                form.appendChild(csrfToken);
+
+                // Debug information
+                console.log('Form created with action:', form.action);
+                console.log('CSRF token:', csrfToken.value);
+
+                // Append form to body and submit after a small delay
+                document.body.appendChild(form);
                 
-                try {
-                    const response = await fetch(`/paypal/payment/${cuotaId}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                        }
-                    });
-
-                    const data = await response.json();
-                    if (data.redirect_url) {
-                        window.location.href = data.redirect_url;
+                // Submit the form after a small delay to ensure it's properly in the DOM
+                setTimeout(() => {
+                    console.log('Submitting form to PayPal...');
+                    try {
+                        form.submit();
+                        console.log('Form submitted successfully');
+                    } catch (error) {
+                        console.error('Error submitting form:', error);
+                        // Restore button state
+                        button.innerHTML = '<i class="fab fa-paypal"></i>';
+                        button.disabled = false;
+                        alert('Error al procesar el pago. Por favor, inténtelo de nuevo.');
                     }
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('Error al iniciar el pago con PayPal');
-                }
+                }, 100);
             });
         });
-        // Initialize tooltips
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
+    });
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
 
-        // Get the modal element
-        var conversionModal = new bootstrap.Modal(document.getElementById('conversionModal'));
+    // Get the modal element
+    var conversionModal = new bootstrap.Modal(document.getElementById('conversionModal'));
 
-        // Add click event listeners to conversion buttons
-        document.querySelectorAll('.convert-btn').forEach(function(button) {
-            button.addEventListener('click', function() {
-                var amount = this.getAttribute('data-bs-title');
-                document.getElementById('euroAmount').textContent = amount;
-                conversionModal.show();
+    // Add click event listeners to conversion buttons
+    document.querySelectorAll('.convert-btn').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var amount = this.getAttribute('data-bs-title');
+            document.getElementById('euroAmount').textContent = amount;
+            conversionModal.show();
 
-                // Hide the tooltip
-                var tooltip = bootstrap.Tooltip.getInstance(this);
-                if (tooltip) {
-                    tooltip.hide();
-                }
-            });
+            // Hide the tooltip
+            var tooltip = bootstrap.Tooltip.getInstance(this);
+            if (tooltip) {
+                tooltip.hide();
+            }
         });
     });
 </script>

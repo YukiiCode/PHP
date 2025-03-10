@@ -9,6 +9,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 use PayPalCheckoutSdk\Core\PayPalEnvironment;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
+use PayPalCheckoutSdk\Core\SandboxEnvironment;
+use PayPalCheckoutSdk\Core\ProductionEnvironment;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
 
@@ -18,42 +20,93 @@ class CuotasController extends Controller
 
     public function __construct()
     {
-        $this->paypalClient = new \PayPalCheckoutSdk\Core\PayPalHttpClient(
-            new \PayPalCheckoutSdk\Core\ProductionEnvironment(
+        if (env('PAYPAL_MODE') === 'sandbox') {
+            $environment = new SandboxEnvironment(
                 env('PAYPAL_CLIENT_ID'),
                 env('PAYPAL_CLIENT_SECRET')
-            )
-        );
+            );
+        } else {
+            $environment = new ProductionEnvironment(
+                env('PAYPAL_CLIENT_ID'),
+                env('PAYPAL_CLIENT_SECRET')
+            );
+        }
+
+        $this->paypalClient = new PayPalHttpClient($environment);
+        \Log::info('PayPal Client initialized in ' . env('PAYPAL_MODE') . ' mode');
     }
 
     public function handlePayPalPayment(Cuotas $cuota)
     {
         try {
+            \Log::debug('Iniciando pago PayPal', ['cuota_id' => $cuota->id, 'cliente' => $cuota->cliente_id]);
+
+            if (!$cuota->cliente->moneda) {
+                throw new \Exception('El cliente no tiene moneda configurada');
+            }
+
             $request = new OrdersCreateRequest();
             $request->body = [
                 'intent' => 'CAPTURE',
                 'purchase_units' => [[
                     'reference_id' => $cuota->id,
                     'amount' => [
-                        'currency_code' => $cuota->cliente->moneda ?? 'EUR',
-                        'value' => $cuota->importe
+                        'currency_code' => strtoupper($cuota->cliente->moneda),
+                        'value' => number_format($cuota->importe, 2, '.', '')
                     ],
                     'description' => $cuota->concepto
-                ]]
+                ]],
+                'application_context' => [
+                    'return_url' => route('paypal.success'),
+                    'cancel_url' => route('paypal.cancel'),
+                    'brand_name' => 'Gestión de Tareas',
+                    'locale' => 'es-ES',
+                    'landing_page' => 'BILLING',
+                    'user_action' => 'PAY_NOW',
+                ]
             ];
 
+            \Log::debug('Solicitud PayPal creada', ['body' => $request->body]);
+            \Log::info('Credenciales PayPal usadas:', [
+                'client_id' => env('PAYPAL_CLIENT_ID'),
+                'mode' => env('PAYPAL_MODE')
+            ]);
+            \Log::debug('Moneda y monto enviados:', [
+                'currency' => strtoupper($cuota->cliente->moneda),
+                'amount' => number_format($cuota->importe, 2, '.', '')
+            ]);
+
             $response = $this->paypalClient->execute($request);
+            \Log::debug('Respuesta PayPal recibida', ['response' => (array)$response]);
+
+            if (!isset($response->result->links)) {
+                throw new \Exception('Estructura de respuesta inválida de PayPal');
+            }
+
             $approvalUrl = collect($response->result->links)
                 ->where('rel', 'approve')
                 ->first()->href;
 
+            // Check if this is an AJAX request
+            if (request()->ajax() || request()->wantsJson()) {
+                return response()->json(['redirect_url' => $approvalUrl]);
+            }
+            
             return redirect()->away($approvalUrl);
-
+        } catch (\PayPalHttp\HttpException $pe) {
+            \Log::error('Error HTTP PayPal: ' . $pe->getMessage(), [
+                'statusCode' => $pe->statusCode,
+                'headers' => $pe->headers,
+                'details' => $pe->getMessage()
+            ]);
+            return redirect()->back()->with('error', 'Error de comunicación con PayPal');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'Error al procesar el pago: ' . $e->getMessage());
         }
     }
+
+
 
     public function paypalSuccess(Request $request)
     {
@@ -65,7 +118,6 @@ class CuotasController extends Controller
 
             return redirect()->route('cuotas.index')
                 ->with('success', 'Pago realizado exitosamente');
-
         } catch (\Exception $e) {
             return redirect()->route('cuotas.index')
                 ->with('error', 'Error al confirmar el pago: ' . $e->getMessage());
@@ -74,14 +126,22 @@ class CuotasController extends Controller
 
     private function capturePayment($orderId)
     {
-        $request = new OrdersCaptureRequest($orderId);
-        $response = $this->paypalClient->execute($request);
+        try {
+            \Log::debug('Capturando pago PayPal', ['order_id' => $orderId]);
+            $request = new OrdersCaptureRequest($orderId);
+            $response = $this->paypalClient->execute($request);
+            \Log::debug('Respuesta captura PayPal', ['response' => $response]);
 
-        if ($response->statusCode !== 201) {
-            throw new \Exception('Payment capture failed');
+            if ($response->statusCode !== 201 || !isset($response->result->purchase_units[0]->reference_id)) {
+                \Log::error('Respuesta inválida de PayPal', ['response' => (array)$response]);
+                throw new \Exception('Error en la estructura de la respuesta de PayPal');
+            }
+
+            return $response->result->purchase_units[0]->reference_id;
+        } catch (\Exception $e) {
+            \Log::error('Error capturando pago: ' . $e->getMessage());
+            throw $e;
         }
-
-        return $response->result->purchase_units[0]->reference_id;
     }
 
     public function paypalCancel()
@@ -95,7 +155,7 @@ class CuotasController extends Controller
         $query = Cuotas::with(['cliente', 'empleado']);
 
         if ($request->filled('search')) {
-            $query->whereHas('cliente', function($q) use ($request) {
+            $query->whereHas('cliente', function ($q) use ($request) {
                 $q->where('nombre', 'like', '%' . $request->search . '%');
             });
         }
@@ -106,7 +166,7 @@ class CuotasController extends Controller
 
         if ($request->filled('mes')) {
             $query->whereMonth('fecha_emision', '=', date('m', strtotime($request->mes)))
-                  ->whereYear('fecha_emision', '=', date('Y', strtotime($request->mes)));
+                ->whereYear('fecha_emision', '=', date('Y', strtotime($request->mes)));
         }
 
         $cuotas = $query->paginate(10);
@@ -133,7 +193,7 @@ class CuotasController extends Controller
 
         $data = $validated;
         $data['pagado'] = ($validated['estado'] === 'pagada') ? 1 : 0;
-        $data['importe'] = $validated['importe']; 
+        $data['importe'] = $validated['importe'];
         unset($data['estado']);
 
         Cuotas::create($data);
@@ -177,7 +237,7 @@ class CuotasController extends Controller
             return redirect()->route('cuotas.index')
                 ->with('error', 'Error al generar el PDF: ' . $e->getMessage());
         }
-    }   
+    }
 
     public function edit(Cuotas $cuota)
     {
@@ -201,7 +261,7 @@ class CuotasController extends Controller
             'importe' => $validated['importe'],
             'fecha_emision' => $validated['fecha_emision'],
             'fecha_pago' => $validated['fecha_pago'],
-            'pagado' => ($validated['pagado'] )
+            'pagado' => ($validated['pagado'])
         ];
 
         $cuota->update($data);
@@ -231,12 +291,12 @@ class CuotasController extends Controller
             $emailContent .= "Tipo: {$cuota->tipo}\n";
             $moneda = $cuota->cliente->moneda ?? 'EUR';
             $emailContent .= "Monto: " . number_format($cuota->importe, 2) . " {$moneda}\n";
-            
+
             // Add euro conversion if needed
             if ($cuota->cliente && $cuota->cliente->moneda && $cuota->cliente->moneda !== 'EUR') {
                 $emailContent .= "Monto en Euros: " . number_format($cuota->getImporteEnEuros(), 2) . "€\n";
             }
-            
+
             $emailContent .= "Estado: " . ($cuota->pagado ? 'Pagada' : 'Pendiente') . "\n"; // Convert pagado to estado text
 
             // Send email
